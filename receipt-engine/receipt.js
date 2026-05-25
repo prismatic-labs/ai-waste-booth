@@ -112,9 +112,8 @@ const Receipt = (() => {
     } else {
       container.innerHTML = `
         <a href="${_esc(upgradeUrl)}" class="btn-primary"
-           target="_blank" rel="noopener">Clean up one GUI AI workflow — £15</a>
-        <p class="cta-supporting-line">Bring one bounded GUI workflow: an email, summary, research brief, content draft,
-          or repeatable task. We return a reusable workflow and usage notes within 5 working days.</p>`;
+           target="_blank" rel="noopener">Fix one AI workflow — £15</a>
+        <p class="cta-supporting-line">Send us one task you repeat with AI. We return a tested prompt template and a short guide — what it does, how to adapt it, what to watch for. Delivered in 5 working days.</p>`;
     }
   }
 
