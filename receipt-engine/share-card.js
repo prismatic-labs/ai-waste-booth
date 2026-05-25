@@ -19,6 +19,9 @@ const ShareCard = (() => {
   function prepare(diagnosis) {
     _readyBlob = null;
     _readyFilename = null;
+    // restore save button visibility in case it was hidden on a previous run
+    const saveBtn = document.getElementById("btn-save-card");
+    if (saveBtn) saveBtn.style.display = "";
 
     if (diagnosis.isBuilder) {
       const canvas = document.getElementById("share-canvas");
@@ -211,10 +214,27 @@ const ShareCard = (() => {
     _readyFilename = filename;
     canvas.toBlob(blob => {
       _readyBlob = blob;
-      // signal the share button it's ready
       const btn = document.getElementById("btn-share-card");
       if (btn) btn.disabled = false;
+      _updateShareUI(blob);
     }, "image/png");
+  }
+
+  function _updateShareUI(blob) {
+    const shareBtn = document.getElementById("btn-share-card");
+    const saveBtn  = document.getElementById("btn-save-card");
+    if (!shareBtn || !saveBtn) return;
+
+    const testFile = new File([blob], "test.png", { type: "image/png" });
+    const canWebShare = !!(navigator.share && navigator.canShare && navigator.canShare({ files: [testFile] }));
+
+    if (canWebShare) {
+      shareBtn.textContent = "Share to Instagram / WhatsApp";
+      saveBtn.textContent  = "Save to Camera Roll";
+    } else {
+      shareBtn.textContent = "Download Image";
+      saveBtn.style.display = "none";
+    }
   }
 
   // ── Logo badge (white pill, logo image inside) ─────────────────────
@@ -258,7 +278,7 @@ const ShareCard = (() => {
     const btn = document.getElementById("btn-share-card");
     if (!btn) return;
     const orig = btn.textContent;
-    btn.textContent = "Saved! Upload it to LinkedIn or Instagram ↑";
+    btn.textContent = "Downloaded! Upload it to LinkedIn or Instagram ↑";
     setTimeout(() => { btn.textContent = orig; }, 4500);
   }
 
