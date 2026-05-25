@@ -70,18 +70,17 @@ const ShareCard = (() => {
     _downloadBlob(_readyBlob, _readyFilename);
   }
 
-  // ── Casual share card — magazine cover style ───────────────────────
+  // ── Casual share card ─────────────────────────────────────────────
   function _drawCasualCard(ctx, d, canvas, img) {
     const archName = _getArchetypeName(d.archetype);
     const oneLiner = _getOneLiner(d.archetype);
 
-    // full-bleed dark background
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0, 0, W, H);
 
-    const imgH = Math.round(H * 0.62);
+    // image takes 65% — leaves 472px text section below
+    const imgH = Math.round(H * 0.65);
 
-    // archetype image full-bleed top
     if (img) {
       ctx.save();
       const scale = Math.max(W / img.naturalWidth, imgH / img.naturalHeight);
@@ -95,53 +94,53 @@ const ShareCard = (() => {
       ctx.fillStyle = grad; ctx.fillRect(0, 0, W, imgH);
     }
 
-    // gradient overlay — fades image into black bottom half
-    const fadeGrad = ctx.createLinearGradient(0, imgH * 0.35, 0, imgH);
-    fadeGrad.addColorStop(0, "rgba(0,0,0,0)");
-    fadeGrad.addColorStop(1, "rgba(0,0,0,0.96)");
+    // strong gradient — ensures white text is always readable
+    const fadeGrad = ctx.createLinearGradient(0, imgH * 0.22, 0, imgH);
+    fadeGrad.addColorStop(0,    "rgba(0,0,0,0)");
+    fadeGrad.addColorStop(0.6,  "rgba(0,0,0,0.82)");
+    fadeGrad.addColorStop(1,    "rgba(0,0,0,0.97)");
     ctx.fillStyle = fadeGrad;
     ctx.fillRect(0, 0, W, imgH);
 
-    // yellow top bar
+    // yellow top bar + eyebrow label
     ctx.fillStyle = "#f0e830";
     ctx.fillRect(0, 0, W, 10);
+    ctx.font = `600 ${r(22)} 'Courier New', monospace`;
+    ctx.letterSpacing = "3px";
+    ctx.fillText("AI WASTE RECEIPT", r(56), r(58));
 
-    // "AI WASTE RECEIPT" — top label
-    ctx.fillStyle = "#f0e830";
-    ctx.font = `600 ${r(30)} 'Courier New', monospace`;
-    ctx.letterSpacing = "4px";
-    ctx.fillText("AI WASTE RECEIPT", r(56), r(70));
-
-    // archetype name — huge, over image
+    // archetype name — bottom-anchored within gradient zone
+    // uses _getWrappedLines so multi-word names stack upward correctly
+    ctx.font = `800 ${r(76)} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.letterSpacing = "-2px";
+    const nameLines  = _getWrappedLines(ctx, archName, W - r(112));
+    const nameLineH  = r(86);
+    const nameBottom = imgH - r(28); // baseline of last line
+    ctx.save();
+    ctx.shadowColor    = "rgba(0,0,0,0.92)";
+    ctx.shadowBlur     = r(6);
+    ctx.shadowOffsetY  = r(2);
     ctx.fillStyle = "#ffffff";
-    ctx.font = `800 ${r(110)} -apple-system, BlinkMacSystemFont, sans-serif`;
-    ctx.letterSpacing = "-3px";
-    _wrap(ctx, archName, r(56), imgH - r(80), W - r(112), r(120));
+    nameLines.forEach((line, i) => {
+      const y = nameBottom - (nameLines.length - 1 - i) * nameLineH;
+      ctx.fillText(line, r(56), y);
+    });
+    ctx.restore();
 
-    // one-liner — just below image boundary
-    ctx.fillStyle = "#aaaaaa";
-    ctx.font = `400 ${r(42)} -apple-system, BlinkMacSystemFont, sans-serif`;
+    // one-liner
+    ctx.fillStyle  = "#cccccc";
+    ctx.font       = `400 italic ${r(32)} -apple-system, BlinkMacSystemFont, sans-serif`;
     ctx.letterSpacing = "0px";
-    _wrap(ctx, oneLiner, r(56), imgH + r(72), W - r(112), r(52));
+    _wrap(ctx, `"${oneLiner}"`, r(56), imgH + r(44), W - r(112), r(40));
 
-    // divider
-    ctx.strokeStyle = "#2a2a2a"; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(r(56), imgH + r(150)); ctx.lineTo(W - r(56), imgH + r(150)); ctx.stroke();
-
-    // share prompt
-    ctx.fillStyle = "#ffffff";
-    ctx.font = `600 ${r(40)} -apple-system, BlinkMacSystemFont, sans-serif`;
-    ctx.letterSpacing = "0px";
-    _wrap(ctx, `Which one are you?`, r(56), imgH + r(220), W - r(112), r(50));
-
-    // URL call to action
+    // URL
     ctx.fillStyle = "#f0e830";
-    ctx.font = `500 ${r(34)} 'Courier New', monospace`;
-    ctx.letterSpacing = "1px";
-    ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), imgH + r(300));
+    ctx.font      = `500 ${r(20)} 'Courier New', monospace`;
+    ctx.letterSpacing = "0.5px";
+    ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), imgH + r(140));
 
-    // branding logo
-    _drawLogo(ctx, r(56), H - r(30));
+    // logo
+    _drawLogo(ctx, r(56), H - r(36));
 
     _store(canvas, `ai-waste-receipt-${d.archetype}.png`);
   }
@@ -240,7 +239,7 @@ const ShareCard = (() => {
   // ── Logo badge (white pill, logo image inside) ─────────────────────
   function _drawLogo(ctx, x, bottomY) {
     if (_logoImg && _logoImg.naturalWidth) {
-      const logoDrawW = r(160);
+      const logoDrawW = r(90);
       const logoDrawH = Math.round(logoDrawW * _logoImg.naturalHeight / _logoImg.naturalWidth);
       const padX = r(14), padY = r(10);
       const badgeW = logoDrawW + padX * 2;
@@ -298,6 +297,21 @@ const ShareCard = (() => {
   }
 
   function r(n) { return Math.round(n * (W / 430)); }
+
+  // returns array of line strings (same logic as _wrap but no drawing)
+  function _getWrappedLines(ctx, text, maxW) {
+    const words = String(text).split(" ");
+    const lines = [];
+    let line = "";
+    words.forEach(word => {
+      const test = line + (line ? " " : "") + word;
+      if (ctx.measureText(test).width > maxW && line) {
+        lines.push(line); line = word;
+      } else { line = test; }
+    });
+    if (line) lines.push(line);
+    return lines;
+  }
 
   function _wrap(ctx, text, x, y, maxW, lineH) {
     const words = String(text).split(" ");
