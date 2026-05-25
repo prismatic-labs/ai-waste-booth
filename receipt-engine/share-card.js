@@ -7,6 +7,14 @@ const ShareCard = (() => {
   let _readyBlob = null;
   let _readyFilename = null;
 
+  // pre-load logo so it's ready by the time prepare() is called
+  let _logoImg = null;
+  (() => {
+    const img = new Image();
+    img.onload = () => { _logoImg = img; };
+    img.src = "../assets/logo.png";
+  })();
+
   // ── Called immediately after receipt renders ───────────────────────
   function prepare(diagnosis) {
     _readyBlob = null;
@@ -43,10 +51,15 @@ const ShareCard = (() => {
         files: [file],
         title: "My AI Waste Receipt",
         text: "Find out which AI waster you are →",
-      }).catch(() => _downloadBlob(_readyBlob, _readyFilename));
+      }).catch(() => {
+        _downloadBlob(_readyBlob, _readyFilename);
+        _showDownloadNudge();
+      });
       return;
     }
+    // desktop or no Web Share API — download and prompt user to upload
     _downloadBlob(_readyBlob, _readyFilename);
+    _showDownloadNudge();
   }
 
   function save() {
@@ -124,11 +137,8 @@ const ShareCard = (() => {
     ctx.letterSpacing = "1px";
     ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), imgH + r(300));
 
-    // branding
-    ctx.fillStyle = "#444";
-    ctx.font = `400 ${r(26)} 'Courier New', monospace`;
-    ctx.letterSpacing = "2px";
-    ctx.fillText("◈ PRISMATIC LABS", r(56), H - r(56));
+    // branding logo
+    _drawLogo(ctx, r(56), H - r(30));
 
     _store(canvas, `ai-waste-receipt-${d.archetype}.png`);
   }
@@ -190,10 +200,8 @@ const ShareCard = (() => {
     ctx.letterSpacing = "1px";
     ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), r(1240));
 
-    ctx.fillStyle = "#2a4040";
-    ctx.font = `400 ${r(26)} 'Courier New', monospace`;
-    ctx.letterSpacing = "2px";
-    ctx.fillText("◈ PRISMATIC LABS", r(56), H - r(56));
+    // branding logo
+    _drawLogo(ctx, r(56), H - r(30));
 
     _store(canvas, `silent-failure-receipt-${d.suspectedPattern}.png`);
   }
@@ -207,6 +215,51 @@ const ShareCard = (() => {
       const btn = document.getElementById("btn-share-card");
       if (btn) btn.disabled = false;
     }, "image/png");
+  }
+
+  // ── Logo badge (white pill, logo image inside) ─────────────────────
+  function _drawLogo(ctx, x, bottomY) {
+    if (_logoImg && _logoImg.naturalWidth) {
+      const logoDrawW = r(160);
+      const logoDrawH = Math.round(logoDrawW * _logoImg.naturalHeight / _logoImg.naturalWidth);
+      const padX = r(14), padY = r(10);
+      const badgeW = logoDrawW + padX * 2;
+      const badgeH = logoDrawH + padY * 2;
+      const badgeX = x;
+      const badgeY = bottomY - badgeH;
+
+      ctx.fillStyle = "#ffffff";
+      _roundRect(ctx, badgeX, badgeY, badgeW, badgeH, r(8));
+      ctx.fill();
+      ctx.drawImage(_logoImg, badgeX + padX, badgeY + padY, logoDrawW, logoDrawH);
+    } else {
+      ctx.fillStyle = "#555";
+      ctx.font = `400 ${r(24)} 'Courier New', monospace`;
+      ctx.letterSpacing = "2px";
+      ctx.fillText("◈ PRISMATIC LABS", x, bottomY - r(10));
+    }
+  }
+
+  function _roundRect(ctx, x, y, w, h, rad) {
+    ctx.beginPath();
+    ctx.moveTo(x + rad, y);
+    ctx.lineTo(x + w - rad, y);
+    ctx.arcTo(x + w, y, x + w, y + rad, rad);
+    ctx.lineTo(x + w, y + h - rad);
+    ctx.arcTo(x + w, y + h, x + w - rad, y + h, rad);
+    ctx.lineTo(x + rad, y + h);
+    ctx.arcTo(x, y + h, x, y + h - rad, rad);
+    ctx.lineTo(x, y + rad);
+    ctx.arcTo(x, y, x + rad, y, rad);
+    ctx.closePath();
+  }
+
+  function _showDownloadNudge() {
+    const btn = document.getElementById("btn-share-card");
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = "Saved! Upload it to LinkedIn or Instagram ↑";
+    setTimeout(() => { btn.textContent = orig; }, 4500);
   }
 
   // ── Utilities ──────────────────────────────────────────────────────
