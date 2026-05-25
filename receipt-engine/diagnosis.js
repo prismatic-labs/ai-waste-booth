@@ -2,12 +2,12 @@
 
 // Pattern lookup: (appType, concern) → PatternId
 const PATTERN_MAP = {
-  support_bot:  { loops: "STALL-001", slow: "BABBLE-001", cost: "CACHE-001", bad_answers: "EMPTY-001", not_sure: "ZOMBIE-001" },
-  rag_app:      { loops: "CTX-001",   slow: "RAG-001",    cost: "CACHE-001", bad_answers: "RAG-001",   not_sure: "RAG-001"   },
-  agent:        { loops: "STALL-001", slow: "CTX-001",    cost: "ZOMBIE-001",bad_answers: "EMPTY-001", not_sure: "STALL-001" },
-  copilot:      { loops: "STALL-001", slow: "BABBLE-001", cost: "CACHE-001", bad_answers: "EMPTY-001", not_sure: "CTX-001"   },
-  automation:   { loops: "ZOMBIE-001",slow: "CTX-001",    cost: "CACHE-001", bad_answers: "EMPTY-001", not_sure: "ZOMBIE-001"},
-  other:        { loops: "STALL-001", slow: "CTX-001",    cost: "CACHE-001", bad_answers: "EMPTY-001", not_sure: "ZOMBIE-001"},
+  support_bot:  { loops: "STALL-001", slow: "BABBLE-001", cost: "CACHE-001", bad_answers: "EMPTY-001", black_box: "EMPTY-001", not_sure: "ZOMBIE-001" },
+  rag_app:      { loops: "CTX-001",   slow: "RAG-001",    cost: "CACHE-001", bad_answers: "RAG-001",   black_box: "EMPTY-001", not_sure: "RAG-001"   },
+  agent:        { loops: "STALL-001", slow: "CTX-001",    cost: "ZOMBIE-001",bad_answers: "EMPTY-001", black_box: "CTX-001",   not_sure: "STALL-001" },
+  copilot:      { loops: "STALL-001", slow: "BABBLE-001", cost: "CACHE-001", bad_answers: "EMPTY-001", black_box: "EMPTY-001", not_sure: "CTX-001"   },
+  automation:   { loops: "ZOMBIE-001",slow: "CTX-001",    cost: "CACHE-001", bad_answers: "EMPTY-001", black_box: "CTX-001",   not_sure: "ZOMBIE-001"},
+  other:        { loops: "STALL-001", slow: "CTX-001",    cost: "CACHE-001", bad_answers: "EMPTY-001", black_box: "EMPTY-001", not_sure: "ZOMBIE-001"},
 };
 
 function _uuid() {
