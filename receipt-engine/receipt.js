@@ -43,30 +43,30 @@ const Receipt = (() => {
 
   // ── Casual (Archetype) layout ──────────────────────────────────────
   function _buildCasualLines(d) {
-    const dateStr = _fmtDate(d.timestamp);
+    const dateStr  = _fmtDate(d.timestamp);
     const archName = _getArchetypeName(d.archetype);
-    const imgSrc = `../assets/archetypes/${d.archetype}.jpg`;
+    const oneLiner = _getOneLiner(d.archetype);
+    const imgSrc   = `../assets/archetypes/${d.archetype}.jpg`;
 
     const lines = [];
     let t = 0;
     const step = 60;
-
     const push = (html) => { lines.push({ html, delay: t }); t += step; };
 
+    // ── Shareable top ─────────────────────────────────────────────────
     push(`<span class="receipt-rule">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
     push(`<span style="text-align:center;display:block;font-weight:bold;letter-spacing:2px;font-size:12px;">AI WASTE RECEIPT</span>`);
     push(`<span class="receipt-rule">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
-    push(`<br>`);
-    push(`<span class="clearfix">
-      <img class="receipt-img" src="${imgSrc}" alt="${archName}"
-           onerror="this.style.display='none'">
-      <span class="receipt-label">USE CASE</span><br>
-      <span>${_esc(d.useCase)}</span>
-    </span>`);
-    push(`<span class="receipt-label">DATE</span><br><span>${dateStr}</span>`);
+    push(`<img class="receipt-hero-img" src="${imgSrc}" alt="${archName}" onerror="this.style.display='none'">`);
+    push(`<span class="receipt-archetype-hero">${_esc(archName)}</span>`);
+    push(`<span class="receipt-one-liner">"${_esc(oneLiner)}"</span>`);
+
+    // ── Personal section ──────────────────────────────────────────────
     push(`<br><span class="receipt-rule">─────────────────────────────</span>`);
-    push(`<span class="receipt-label">DIAGNOSIS</span>`);
-    push(`<span class="receipt-archetype-name">${_esc(archName)}</span>`);
+    push(`<span class="receipt-personal-divider">YOUR DIAGNOSIS</span>`);
+    push(`<span class="receipt-rule">─────────────────────────────</span><br>`);
+    push(`<span class="receipt-label">USE CASE</span><br><span>${_esc(d.useCase)}</span>`);
+    push(`<span class="receipt-label">DATE</span><br><span>${dateStr}</span>`);
     push(`<br>`);
     push(`<span class="receipt-label">SYMPTOMS</span>`);
     d.symptoms.forEach(s => push(`<span>• ${_esc(s)}</span>`));
@@ -184,6 +184,11 @@ const Receipt = (() => {
   function _getArchetypeName(id) {
     const a = ARCHETYPES_DATA.find(x => x.id === id);
     return a ? a.name : id;
+  }
+
+  function _getOneLiner(id) {
+    const a = ARCHETYPES_DATA.find(x => x.id === id);
+    return a ? a.oneLiner : "";
   }
 
   function _getPatternName(id) {

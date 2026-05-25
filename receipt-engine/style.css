@@ -282,6 +282,40 @@ body { min-height: 100dvh; overflow-x: hidden; }
 }
 .clearfix::after { content: ''; display: table; clear: both; }
 
+/* shareable hero block */
+.receipt-hero-img {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin: 10px 0 10px;
+  filter: grayscale(15%);
+}
+.receipt-archetype-hero {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #111;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.receipt-one-liner {
+  display: block;
+  font-style: italic;
+  color: #555;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.receipt-personal-divider {
+  display: block;
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #888;
+}
+
 /* QR code in receipt */
 .receipt-qr {
   display: flex;
