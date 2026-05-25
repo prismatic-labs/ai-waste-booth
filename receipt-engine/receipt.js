@@ -74,9 +74,9 @@ const Receipt = (() => {
     push(`<span class="receipt-label">FIX WORKFLOW</span>`);
     d.humanFix.forEach((f, i) => push(`<span>${i + 1}. ${_esc(f)}</span>`));
     push(`<br><span class="receipt-rule">─────────────────────────────</span>`);
-    push(`<span style="font-size:11px;font-weight:bold;letter-spacing:1px;">UPGRADE THIS WORKFLOW — £15</span>`);
-    push(`<span style="font-size:11px;">Ox Tech Week offer</span>`);
-    push(`<div id="receipt-qr-casual" class="receipt-qr"></div>`);
+    push(`<span style="font-size:15px;font-weight:bold;letter-spacing:1px;color:#b8a800;">▶ UPGRADE THIS WORKFLOW — £15</span>`);
+    push(`<span style="font-size:12px;color:#888;">Ox Tech Week offer · scan to claim</span>`);
+    push(`<div id="receipt-qr-casual" class="receipt-qr" style="margin-top:8px;"></div>`);
     push(`<span class="receipt-rule">─────────────────────────────</span>`);
     push(`<span style="font-size:10px;color:#888;">Prismatic Labs · prismaticlabs.ai</span>`);
     push(`<span class="receipt-rule">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
@@ -130,23 +130,24 @@ const Receipt = (() => {
     if (diagnosis.isBuilder) {
       const el = document.getElementById("receipt-qr-builder");
       if (!el) return;
-      _makeQR(el, CONFIG.TEARDOWN_URL, "Book a 20-min Teardown", "#30f0c0", "#0d1117");
+      _makeQR(el, CONFIG.TEARDOWN_URL, "Book a 20-min Teardown", "#30f0c0", "#0d1117", 96);
     } else {
       const el = document.getElementById("receipt-qr-casual");
       if (!el) return;
-      _makeQR(el, CONFIG.UPGRADE_URL, "Scan to upgrade — £15 Ox Tech Week offer", "#000000", "#f5f0e8");
+      _makeQR(el, CONFIG.UPGRADE_URL, "Scan to upgrade — £15 Ox Tech Week offer", "#000000", "#f5f0e8", 110);
     }
   }
 
-  function _makeQR(containerEl, url, ctaText, colorDark, colorLight) {
+  function _makeQR(containerEl, url, ctaText, colorDark, colorLight, size) {
     const wrap = document.createElement("div");
     wrap.className = "receipt-qr-image";
+    const qrSize = size || 96;
 
     try {
       new QRCode(wrap, {
         text: url,
-        width: 80,
-        height: 80,
+        width: qrSize,
+        height: qrSize,
         colorDark: colorDark || "#000000",
         colorLight: colorLight || "#ffffff",
         correctLevel: QRCode.CorrectLevel.M,
