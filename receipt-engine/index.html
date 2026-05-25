@@ -64,16 +64,29 @@
 <!-- ─────────────────── SCREEN 3: RECEIPT REVEAL ─────────────────────── -->
 <div id="screen-receipt" class="screen">
   <div class="screen-inner receipt-screen-inner">
-    <div id="receipt-container" class="receipt-container">
-      <!-- injected by receipt.js -->
-    </div>
-    <div class="receipt-actions">
-      <button id="btn-share-card" class="btn-primary">Share Receipt Image</button>
-      <button id="btn-save-card" class="btn-secondary">Save Image</button>
+
+    <!-- 1. Social card preview -->
+    <div id="social-card-container"></div>
+
+    <!-- 2. Share / save buttons -->
+    <div class="receipt-share-actions">
+      <button id="btn-share-card" class="btn-primary">Share image</button>
+      <button id="btn-save-card" class="btn-secondary">Save image</button>
       <a id="btn-linkedin" class="btn-linkedin" href="#" target="_blank" rel="noopener">Share on LinkedIn</a>
       <p class="screenshot-fallback">Can't save? Screenshot this receipt.</p>
+    </div>
+
+    <!-- 3. Personal receipt -->
+    <div id="receipt-container" class="receipt-container"></div>
+
+    <!-- 4. CTA (injected by receipt.js based on path) -->
+    <div id="receipt-cta-actions" class="receipt-cta-actions"></div>
+
+    <!-- 5. Footer -->
+    <div class="receipt-footer-actions">
       <button id="btn-restart" class="btn-ghost">Start again</button>
     </div>
+
   </div>
 </div>
 

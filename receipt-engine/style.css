@@ -218,6 +218,139 @@ body { min-height: 100dvh; overflow-x: hidden; }
   margin-bottom: 24px;
 }
 
+/* ── Social card ───────────────────────────────────────────────── */
+.social-card {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.social-card.visible { opacity: 1; transform: none; }
+
+.casual-social {
+  background: #0a0a0a;
+  border: 1px solid var(--border);
+}
+.social-card-image-wrap {
+  position: relative;
+  background: #111;
+}
+.social-card-img {
+  display: block;
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+.social-card-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 48px 16px 14px;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.93));
+}
+.social-card-eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.casual-social .social-card-name {
+  display: block;
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.social-card-oneliner {
+  display: block;
+  font-style: italic;
+  color: #ccc;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.social-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(0,0,0,0.85);
+  border-top: 1px solid var(--border);
+}
+.social-card-hook {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+.social-card-url {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--accent);
+}
+
+.builder-social {
+  background: #0d1117;
+  border: 1px solid #1e3a3a;
+  padding: 24px 20px 0;
+}
+.builder-social .social-card-eyebrow { color: var(--accent-2); }
+.social-card-pattern-id {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #4a9a9a;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.builder-social .social-card-name {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+.social-card-risk-line {
+  display: block;
+  font-size: 13px;
+  color: #c0cfd0;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.builder-social .social-card-footer {
+  background: transparent;
+  border-top: 1px solid #1e3a3a;
+  padding: 10px 0;
+  margin-top: 4px;
+}
+.builder-social .social-card-url { color: var(--accent-2); }
+
+/* ── Action sections ───────────────────────────────────────────── */
+.receipt-share-actions,
+.receipt-cta-actions,
+.receipt-footer-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.receipt-cta-actions { margin-top: 8px; }
+.receipt-footer-actions { margin-bottom: 40px; }
+
+.cta-supporting-line {
+  font-size: 13px;
+  color: var(--text-dim);
+  text-align: center;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
 /* ── Receipt card ──────────────────────────────────────────────── */
 .receipt-card {
   background: #f5f0e8;
@@ -282,39 +415,6 @@ body { min-height: 100dvh; overflow-x: hidden; }
 }
 .clearfix::after { content: ''; display: table; clear: both; }
 
-/* shareable hero block */
-.receipt-hero-img {
-  display: block;
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin: 10px 0 10px;
-  filter: grayscale(15%);
-}
-.receipt-archetype-hero {
-  display: block;
-  font-size: 24px;
-  font-weight: bold;
-  color: #111;
-  letter-spacing: -0.5px;
-  line-height: 1.1;
-  margin-bottom: 4px;
-}
-.receipt-one-liner {
-  display: block;
-  font-style: italic;
-  color: #555;
-  font-size: 12px;
-  line-height: 1.5;
-}
-.receipt-personal-divider {
-  display: block;
-  text-align: center;
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: #888;
-}
 
 /* QR code in receipt */
 .receipt-qr {
@@ -330,12 +430,6 @@ body { min-height: 100dvh; overflow-x: hidden; }
 .receipt-card.builder .receipt-cta-text { color: #4a6a6a; }
 
 /* ── Action buttons ────────────────────────────────────────────── */
-.receipt-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
 .btn-primary {
   background: var(--accent);
   color: #000;
