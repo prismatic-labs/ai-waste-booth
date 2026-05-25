@@ -320,6 +320,39 @@ body { min-height: 100dvh; overflow-x: hidden; }
 .btn-primary.builder-cta {
   background: var(--accent-2);
 }
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border-lit);
+  border-radius: var(--radius);
+  padding: 14px 32px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  max-width: 320px;
+  transition: border-color 0.15s;
+}
+.btn-secondary:hover { border-color: var(--accent); }
+.btn-linkedin {
+  display: block;
+  background: #0a66c2;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 14px 32px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.btn-linkedin:hover { opacity: 0.85; }
 .btn-ghost {
   background: transparent;
   color: var(--text-muted);

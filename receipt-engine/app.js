@@ -103,19 +103,33 @@ function onCasualComplete(diagnosis) {
   state.diagnosis = diagnosis;
   showScreen("screen-receipt");
   Receipt.render(diagnosis);
+  _updateLinkedIn(diagnosis);
   pingCensus(diagnosis);
 }
 
 function onBuilderComplete(diagnosis) {
+  state.diagnosis = diagnosis;
   showScreen("screen-receipt");
   Receipt.render(diagnosis);
+  _updateLinkedIn(diagnosis);
   pingCensus(diagnosis);
 }
 
-// ── Share card button ─────────────────────────────────────────────────
-document.getElementById("btn-share-card").addEventListener("click", () => {
-  if (state.diagnosis) ShareCard.generate(state.diagnosis);
-});
+// ── Share / Save buttons ──────────────────────────────────────────────
+document.getElementById("btn-share-card").addEventListener("click", () => ShareCard.share());
+document.getElementById("btn-save-card").addEventListener("click",  () => ShareCard.save());
+
+function _updateLinkedIn(diagnosis) {
+  const url = "https://prismatic-labs.github.io/ai-waste-booth/";
+  const name = diagnosis.isBuilder
+    ? (diagnosis.suspectedPattern || "a silent failure")
+    : (ARCHETYPES_DATA.find(a => a.id === diagnosis.archetype)?.name || "");
+  const text = encodeURIComponent(
+    `I just got diagnosed as "${name}" at the AI Waste Receipt booth by Prismatic Labs.\n\nFind out which type of AI waster you are 👇\n${url}`
+  );
+  document.getElementById("btn-linkedin").href =
+    `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
+}
 
 // ── Restart ───────────────────────────────────────────────────────────
 document.getElementById("btn-restart").addEventListener("click", () => {

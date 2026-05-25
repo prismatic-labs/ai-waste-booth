@@ -1,260 +1,246 @@
-/* share-card.js — canvas-based PNG share card, no html2canvas dependency */
+/* share-card.js — canvas share card, pre-generated on receipt render */
 
 const ShareCard = (() => {
   const W = 1080;
-  const H = 1350; // 4:5 portrait
+  const H = 1350; // 4:5 portrait — native Instagram / LinkedIn format
 
-  function generate(diagnosis) {
+  let _readyBlob = null;
+  let _readyFilename = null;
+
+  // ── Called immediately after receipt renders ───────────────────────
+  function prepare(diagnosis) {
+    _readyBlob = null;
+    _readyFilename = null;
+
+    if (diagnosis.isBuilder) {
+      const canvas = document.getElementById("share-canvas");
+      canvas.width = W;
+      canvas.height = H;
+      _drawBuilderCard(canvas.getContext("2d"), diagnosis, canvas);
+    } else {
+      const img = new Image();
+      img.onload  = () => _drawAndStore(diagnosis, img);
+      img.onerror = () => _drawAndStore(diagnosis, null);
+      img.src = `../assets/archetypes/${diagnosis.archetype}.jpg`;
+    }
+  }
+
+  function _drawAndStore(diagnosis, img) {
     const canvas = document.getElementById("share-canvas");
     canvas.width = W;
     canvas.height = H;
-    const ctx = canvas.getContext("2d");
-
-    if (diagnosis.isBuilder) {
-      _drawBuilderCard(ctx, diagnosis, canvas);
-    } else {
-      const archImg = new Image();
-      archImg.onload  = () => _drawCasualCard(ctx, diagnosis, canvas, archImg);
-      archImg.onerror = () => _drawCasualCard(ctx, diagnosis, canvas, null);
-      archImg.src = `../assets/archetypes/${diagnosis.archetype}.jpg`;
-    }
+    _drawCasualCard(canvas.getContext("2d"), diagnosis, canvas, img);
   }
 
-  // ── Casual share card ────────────────────────────────────────────
+  // ── Called on share button click — uses pre-stored blob ────────────
+  function share() {
+    if (!_readyBlob) { _fallbackMsg(); return; }
+
+    const file = new File([_readyBlob], _readyFilename, { type: "image/png" });
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        files: [file],
+        title: "My AI Waste Receipt",
+        text: "Find out which AI waster you are →",
+      }).catch(() => _downloadBlob(_readyBlob, _readyFilename));
+      return;
+    }
+    _downloadBlob(_readyBlob, _readyFilename);
+  }
+
+  function save() {
+    if (!_readyBlob) { _fallbackMsg(); return; }
+    _downloadBlob(_readyBlob, _readyFilename);
+  }
+
+  // ── Casual share card — magazine cover style ───────────────────────
   function _drawCasualCard(ctx, d, canvas, img) {
     const archName = _getArchetypeName(d.archetype);
+    const oneLiner = _getOneLiner(d.archetype);
 
-    // background
+    // full-bleed dark background
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0, 0, W, H);
 
-    // top accent bar
-    ctx.fillStyle = "#f0e830";
-    ctx.fillRect(0, 0, W, 8);
+    const imgH = Math.round(H * 0.62);
 
-    // archetype image (top ~45% of card)
+    // archetype image full-bleed top
     if (img) {
-      const imgH = Math.round(H * 0.45);
       ctx.save();
-      ctx.globalAlpha = 0.92;
-      // cover fit
       const scale = Math.max(W / img.naturalWidth, imgH / img.naturalHeight);
-      const sw = W / scale;
-      const sh = imgH / scale;
-      const sx = (img.naturalWidth - sw) / 2;
-      const sy = (img.naturalHeight - sh) / 2;
-      ctx.drawImage(img, sx, sy, sw, sh, 0, 8, W, imgH);
+      const sw = W / scale, sh = imgH / scale;
+      const sx = (img.naturalWidth - sw) / 2, sy = (img.naturalHeight - sh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, W, imgH);
       ctx.restore();
-
-      // gradient overlay over image bottom
-      const grad = ctx.createLinearGradient(0, imgH * 0.5, 0, imgH + 8);
-      grad.addColorStop(0, "rgba(10,10,10,0)");
-      grad.addColorStop(1, "rgba(10,10,10,1)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 8, W, imgH);
     } else {
-      // placeholder gradient
-      const grad = ctx.createLinearGradient(0, 0, W, H * 0.45);
-      grad.addColorStop(0, "#1a1a1a");
-      grad.addColorStop(1, "#0a0a0a");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 8, W, H * 0.45);
+      const grad = ctx.createLinearGradient(0, 0, W, imgH);
+      grad.addColorStop(0, "#1a1a2e"); grad.addColorStop(1, "#0a0a0a");
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, imgH);
     }
 
-    const textY = img ? Math.round(H * 0.47) : 200;
+    // gradient overlay — fades image into black bottom half
+    const fadeGrad = ctx.createLinearGradient(0, imgH * 0.35, 0, imgH);
+    fadeGrad.addColorStop(0, "rgba(0,0,0,0)");
+    fadeGrad.addColorStop(1, "rgba(0,0,0,0.96)");
+    ctx.fillStyle = fadeGrad;
+    ctx.fillRect(0, 0, W, imgH);
 
-    // "AI WASTE RECEIPT" label
+    // yellow top bar
     ctx.fillStyle = "#f0e830";
-    ctx.font = `500 ${_px(28)} 'Courier New', Courier, monospace`;
+    ctx.fillRect(0, 0, W, 10);
+
+    // "AI WASTE RECEIPT" — top label
+    ctx.fillStyle = "#f0e830";
+    ctx.font = `600 ${r(30)} 'Courier New', monospace`;
     ctx.letterSpacing = "4px";
-    ctx.fillText("AI WASTE RECEIPT", _px(64), textY);
+    ctx.fillText("AI WASTE RECEIPT", r(56), r(70));
 
-    // archetype name
+    // archetype name — huge, over image
     ctx.fillStyle = "#ffffff";
-    ctx.font = `700 ${_px(96)} -apple-system, sans-serif`;
-    ctx.letterSpacing = "-2px";
-    _wrapText(ctx, archName, _px(64), textY + _px(110), W - _px(128), _px(108));
+    ctx.font = `800 ${r(110)} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.letterSpacing = "-3px";
+    _wrap(ctx, archName, r(56), imgH - r(80), W - r(112), r(120));
 
-    // one-liner
-    const oneLiner = _getOneLiner(d.archetype);
+    // one-liner — just below image boundary
     ctx.fillStyle = "#aaaaaa";
-    ctx.font = `400 ${_px(38)} -apple-system, sans-serif`;
+    ctx.font = `400 ${r(42)} -apple-system, BlinkMacSystemFont, sans-serif`;
     ctx.letterSpacing = "0px";
-    _wrapText(ctx, oneLiner, _px(64), textY + _px(260), W - _px(128), _px(46));
+    _wrap(ctx, oneLiner, r(56), imgH + r(72), W - r(112), r(52));
 
     // divider
-    ctx.strokeStyle = "#2a2a2a";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(_px(64), textY + _px(360));
-    ctx.lineTo(W - _px(64), textY + _px(360));
-    ctx.stroke();
+    ctx.strokeStyle = "#2a2a2a"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(r(56), imgH + r(150)); ctx.lineTo(W - r(56), imgH + r(150)); ctx.stroke();
 
-    // share line
-    ctx.fillStyle = "#888888";
-    ctx.font = `400 ${_px(32)} 'Courier New', Courier, monospace`;
-    ctx.letterSpacing = "0px";
-    _wrapText(ctx,
-      `"I got diagnosed as ${archName} by Prismatic Labs"`,
-      _px(64), textY + _px(430), W - _px(128), _px(40));
-
-    // branding
-    ctx.fillStyle = "#555555";
-    ctx.font = `400 ${_px(26)} 'Courier New', Courier, monospace`;
-    ctx.letterSpacing = "2px";
-    ctx.fillText("◈ PRISMATIC LABS · prismaticlabs.ai", _px(64), H - _px(64));
-
-    _export(canvas, `ai-waste-receipt-${d.archetype}.png`);
-  }
-
-  // ── Builder share card ────────────────────────────────────────────
-  function _drawBuilderCard(ctx, d, canvas) {
-    // background
-    ctx.fillStyle = "#0d1117";
-    ctx.fillRect(0, 0, W, H);
-
-    // top accent bar
-    ctx.fillStyle = "#30f0c0";
-    ctx.fillRect(0, 0, W, 8);
-
-    // label
-    ctx.fillStyle = "#30f0c0";
-    ctx.font = `500 ${_px(26)} 'Courier New', Courier, monospace`;
-    ctx.letterSpacing = "4px";
-    ctx.fillText("SILENT FAILURE RECEIPT", _px(64), _px(120));
-
-    // pattern ID
-    ctx.fillStyle = "#c0cfd0";
-    ctx.font = `400 ${_px(36)} 'Courier New', Courier, monospace`;
-    ctx.letterSpacing = "2px";
-    ctx.fillText(d.suspectedPattern, _px(64), _px(220));
-
-    // pattern name
-    const patName = _getPatternName(d.suspectedPattern);
+    // share prompt
     ctx.fillStyle = "#ffffff";
-    ctx.font = `700 ${_px(80)} -apple-system, sans-serif`;
-    ctx.letterSpacing = "-1px";
-    _wrapText(ctx, patName, _px(64), _px(340), W - _px(128), _px(92));
-
-    // risk
-    ctx.fillStyle = "#4a9a9a";
-    ctx.font = `500 ${_px(30)} 'Courier New', Courier, monospace`;
-    ctx.letterSpacing = "2px";
-    ctx.fillText("RISK", _px(64), _px(520));
-
-    ctx.fillStyle = "#c0cfd0";
-    ctx.font = `400 ${_px(36)} -apple-system, sans-serif`;
+    ctx.font = `600 ${r(40)} -apple-system, BlinkMacSystemFont, sans-serif`;
     ctx.letterSpacing = "0px";
-    _wrapText(ctx, d.risk, _px(64), _px(580), W - _px(128), _px(44));
+    _wrap(ctx, `Which one are you?`, r(56), imgH + r(220), W - r(112), r(50));
 
-    // divider
-    ctx.strokeStyle = "#1e3a3a";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(_px(64), _px(720));
-    ctx.lineTo(W - _px(64), _px(720));
-    ctx.stroke();
-
-    // secondary risk
-    ctx.fillStyle = "#4a9a9a";
-    ctx.font = `500 ${_px(30)} 'Courier New', Courier, monospace`;
-    ctx.letterSpacing = "2px";
-    ctx.fillText("SECONDARY RISK", _px(64), _px(800));
-
-    ctx.fillStyle = "#888888";
-    ctx.font = `400 italic ${_px(34)} -apple-system, sans-serif`;
-    ctx.letterSpacing = "0px";
-    _wrapText(ctx, d.secondaryRisk, _px(64), _px(862), W - _px(128), _px(42));
+    // URL call to action
+    ctx.fillStyle = "#f0e830";
+    ctx.font = `500 ${r(34)} 'Courier New', monospace`;
+    ctx.letterSpacing = "1px";
+    ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), imgH + r(300));
 
     // branding
-    ctx.fillStyle = "#2a4040";
-    ctx.font = `400 ${_px(26)} 'Courier New', Courier, monospace`;
+    ctx.fillStyle = "#444";
+    ctx.font = `400 ${r(26)} 'Courier New', monospace`;
     ctx.letterSpacing = "2px";
-    ctx.fillText("◈ PRISMATIC LABS · prismaticlabs.ai", _px(64), H - _px(64));
+    ctx.fillText("◈ PRISMATIC LABS", r(56), H - r(56));
 
-    _export(canvas, `silent-failure-receipt-${d.suspectedPattern}.png`);
+    _store(canvas, `ai-waste-receipt-${d.archetype}.png`);
   }
 
-  // ── Export ────────────────────────────────────────────────────────
-  function _export(canvas, filename) {
+  // ── Builder share card ─────────────────────────────────────────────
+  function _drawBuilderCard(ctx, d, canvas) {
+    const patName = _getPatternName(d.suspectedPattern);
+
+    ctx.fillStyle = "#0d1117"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#30f0c0"; ctx.fillRect(0, 0, W, 10);
+
+    ctx.fillStyle = "#30f0c0";
+    ctx.font = `600 ${r(28)} 'Courier New', monospace`;
+    ctx.letterSpacing = "4px";
+    ctx.fillText("SILENT FAILURE RECEIPT", r(56), r(100));
+
+    ctx.fillStyle = "#4a9a9a";
+    ctx.font = `400 ${r(36)} 'Courier New', monospace`;
+    ctx.letterSpacing = "2px";
+    ctx.fillText(d.suspectedPattern, r(56), r(200));
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = `800 ${r(96)} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.letterSpacing = "-2px";
+    _wrap(ctx, patName, r(56), r(340), W - r(112), r(110));
+
+    ctx.strokeStyle = "#1e3a3a"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(r(56), r(520)); ctx.lineTo(W - r(56), r(520)); ctx.stroke();
+
+    ctx.fillStyle = "#4a9a9a";
+    ctx.font = `500 ${r(30)} 'Courier New', monospace`;
+    ctx.letterSpacing = "2px";
+    ctx.fillText("RISK", r(56), r(600));
+
+    ctx.fillStyle = "#c0cfd0";
+    ctx.font = `400 ${r(38)} -apple-system, sans-serif`;
+    ctx.letterSpacing = "0px";
+    _wrap(ctx, d.risk, r(56), r(660), W - r(112), r(48));
+
+    ctx.strokeStyle = "#1e3a3a";
+    ctx.beginPath(); ctx.moveTo(r(56), r(800)); ctx.lineTo(W - r(56), r(800)); ctx.stroke();
+
+    ctx.fillStyle = "#4a9a9a";
+    ctx.font = `500 ${r(30)} 'Courier New', monospace`;
+    ctx.letterSpacing = "2px";
+    ctx.fillText("SECONDARY RISK", r(56), r(880));
+
+    ctx.fillStyle = "#888888";
+    ctx.font = `italic 400 ${r(36)} -apple-system, sans-serif`;
+    ctx.letterSpacing = "0px";
+    _wrap(ctx, d.secondaryRisk, r(56), r(940), W - r(112), r(46));
+
+    ctx.fillStyle = "#ffffff";
+    ctx.font = `600 ${r(40)} -apple-system, sans-serif`;
+    _wrap(ctx, "Is your system failing silently?", r(56), r(1160), W - r(112), r(50));
+
+    ctx.fillStyle = "#30f0c0";
+    ctx.font = `500 ${r(32)} 'Courier New', monospace`;
+    ctx.letterSpacing = "1px";
+    ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), r(1240));
+
+    ctx.fillStyle = "#2a4040";
+    ctx.font = `400 ${r(26)} 'Courier New', monospace`;
+    ctx.letterSpacing = "2px";
+    ctx.fillText("◈ PRISMATIC LABS", r(56), H - r(56));
+
+    _store(canvas, `silent-failure-receipt-${d.suspectedPattern}.png`);
+  }
+
+  // ── Store blob once drawn ──────────────────────────────────────────
+  function _store(canvas, filename) {
+    _readyFilename = filename;
     canvas.toBlob(blob => {
-      if (!blob) { _fallback(canvas, filename); return; }
-
-      const file = new File([blob], filename, { type: "image/png" });
-
-      // Web Share API with files (iOS Safari 15+, Android Chrome)
-      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-        navigator.share({
-          files: [file],
-          title: "My AI Waste Receipt",
-          text: "Get yours at Prismatic Labs →",
-        }).catch(() => _downloadBlob(blob, filename));
-        return;
-      }
-
-      _downloadBlob(blob, filename);
+      _readyBlob = blob;
+      // signal the share button it's ready
+      const btn = document.getElementById("btn-share-card");
+      if (btn) btn.disabled = false;
     }, "image/png");
   }
 
+  // ── Utilities ──────────────────────────────────────────────────────
   function _downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 10000);
   }
 
-  function _fallback(canvas, filename) {
-    // last resort — open in new tab so user can long-press save
-    try {
-      const url = canvas.toDataURL("image/png");
-      const w = window.open();
-      if (w) {
-        w.document.write(`<img src="${url}" style="max-width:100%"><p>Long-press or right-click to save.</p>`);
-      }
-    } catch (e) {}
+  function _fallbackMsg() {
+    const btn = document.getElementById("btn-share-card");
+    if (btn) btn.textContent = "Generating… try again";
   }
 
-  // ── Helpers ───────────────────────────────────────────────────────
-  function _px(n) {
-    // returns value scaled to canvas size (W=1080)
-    return Math.round(n * (W / 430));
-  }
+  function r(n) { return Math.round(n * (W / 430)); }
 
-  function _wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+  function _wrap(ctx, text, x, y, maxW, lineH) {
     const words = String(text).split(" ");
-    let line = "";
-    let currentY = y;
-    words.forEach((word, i) => {
+    let line = "", curY = y;
+    words.forEach(word => {
       const test = line + (line ? " " : "") + word;
-      if (ctx.measureText(test).width > maxWidth && line) {
-        ctx.fillText(line, x, currentY);
-        line = word;
-        currentY += lineHeight;
-      } else {
-        line = test;
-      }
+      if (ctx.measureText(test).width > maxW && line) {
+        ctx.fillText(line, x, curY); line = word; curY += lineH;
+      } else { line = test; }
     });
-    if (line) ctx.fillText(line, x, currentY);
+    if (line) ctx.fillText(line, x, curY);
   }
 
-  function _getArchetypeName(id) {
-    const a = ARCHETYPES_DATA.find(x => x.id === id);
-    return a ? a.name : id;
-  }
+  function _getArchetypeName(id) { return ARCHETYPES_DATA.find(x => x.id === id)?.name || id; }
+  function _getOneLiner(id)      { return ARCHETYPES_DATA.find(x => x.id === id)?.oneLiner || ""; }
+  function _getPatternName(id)   { return PATTERNS_DATA.find(x => x.id === id)?.name || id; }
 
-  function _getOneLiner(id) {
-    const a = ARCHETYPES_DATA.find(x => x.id === id);
-    return a ? a.oneLiner : "";
-  }
-
-  function _getPatternName(id) {
-    const p = PATTERNS_DATA.find(x => x.id === id);
-    return p ? p.name : id;
-  }
-
-  return { generate };
+  return { prepare, share, save };
 })();

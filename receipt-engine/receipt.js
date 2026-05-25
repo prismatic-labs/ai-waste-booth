@@ -23,9 +23,12 @@ const Receipt = (() => {
 
     container.appendChild(card);
 
-    // render QR after last line appears
+    // render QR after last line appears, then pre-generate share card
     const lastDelay = lines[lines.length - 1]?.delay || 0;
-    setTimeout(() => _renderQR(diagnosis), lastDelay + 80);
+    setTimeout(() => {
+      _renderQR(diagnosis);
+      ShareCard.prepare(diagnosis);
+    }, lastDelay + 80);
 
     // update share button style for builder
     const shareBtn = document.getElementById("btn-share-card");
