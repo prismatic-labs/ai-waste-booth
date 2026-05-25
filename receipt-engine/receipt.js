@@ -143,11 +143,6 @@ const Receipt = (() => {
     push(`<span class="receipt-label">FIX WORKFLOW</span>`);
     d.humanFix.forEach((f, i) => push(`<span>${i + 1}. ${_esc(f)}</span>`));
     push(`<br><span class="receipt-rule">─────────────────────────────</span>`);
-    push(`<span style="font-size:12px;font-weight:bold;color:#b8a800;">CLEAN UP ONE GUI AI WORKFLOW — £15</span>`);
-    push(`<span style="font-size:11px;color:#888;line-height:1.6;">One bounded GUI workflow: an email, summary, research brief, content draft, or repeatable task. Includes a reusable workflow and usage notes. Not a full project, codebase, or giant research report.</span>`);
-    push(`<span style="font-size:11px;color:#888;">Ox Tech Week offer · scan to claim</span>`);
-    push(`<div id="receipt-qr-casual" class="receipt-qr" style="margin-top:8px;"></div>`);
-    push(`<span class="receipt-rule">─────────────────────────────</span>`);
     push(`<a href="https://prismaticlabs.ai" target="_blank" rel="noopener" style="font-size:10px;color:#888;text-decoration:none;">Prismatic Labs · prismaticlabs.ai</a>`);
     push(`<span class="receipt-rule">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
 
@@ -202,11 +197,6 @@ const Receipt = (() => {
       const url = (typeof CONFIG !== "undefined" && CONFIG.VETCH_SCAN_URL) ||
                   (typeof CONFIG !== "undefined" && CONFIG.TEARDOWN_URL) || "";
       if (url) _makeQR(el, url, "Scan to run a free Vetch scan", "#30f0c0", "#0d1117", 96);
-    } else {
-      const el = document.getElementById("receipt-qr-casual");
-      if (!el) return;
-      const url = (typeof CONFIG !== "undefined" && CONFIG.UPGRADE_URL) || "";
-      if (url) _makeQR(el, url, "Scan to claim — Ox Tech Week offer", "#000000", "#f5f0e8", 110);
     }
   }
 
