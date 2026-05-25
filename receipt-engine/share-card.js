@@ -75,12 +75,13 @@ const ShareCard = (() => {
   function _drawCasualCard(ctx, d, canvas, img) {
     const archName = _getArchetypeName(d.archetype);
     const oneLiner = _getOneLiner(d.archetype);
+    const pad = r(52);
+    const maxW = W - pad * 2;
 
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0, 0, W, H);
 
-    // image takes 65% — leaves 472px text section below
-    const imgH = Math.round(H * 0.65);
+    const imgH = Math.round(H * 0.62);
 
     if (img) {
       ctx.save();
@@ -95,53 +96,68 @@ const ShareCard = (() => {
       ctx.fillStyle = grad; ctx.fillRect(0, 0, W, imgH);
     }
 
-    // strong gradient — ensures white text is always readable
-    const fadeGrad = ctx.createLinearGradient(0, imgH * 0.22, 0, imgH);
-    fadeGrad.addColorStop(0,    "rgba(0,0,0,0)");
-    fadeGrad.addColorStop(0.6,  "rgba(0,0,0,0.82)");
-    fadeGrad.addColorStop(1,    "rgba(0,0,0,0.97)");
+    const fadeGrad = ctx.createLinearGradient(0, imgH * 0.25, 0, imgH);
+    fadeGrad.addColorStop(0,   "rgba(0,0,0,0)");
+    fadeGrad.addColorStop(0.6, "rgba(0,0,0,0.82)");
+    fadeGrad.addColorStop(1,   "rgba(0,0,0,0.97)");
     ctx.fillStyle = fadeGrad;
     ctx.fillRect(0, 0, W, imgH);
 
-    // yellow top bar + eyebrow label
+    // yellow top bar + eyebrow
     ctx.fillStyle = "#f0e830";
     ctx.fillRect(0, 0, W, 10);
-    ctx.font = `600 ${r(22)}px 'Courier New', monospace`;
+    ctx.font = `600 ${r(20)}px 'Courier New', monospace`;
     ctx.letterSpacing = "3px";
-    ctx.fillText("AI WASTE RECEIPT", r(56), r(58));
+    ctx.fillStyle = "#f0e830";
+    ctx.fillText("AI WASTE RECEIPT", pad, r(56));
 
-    // archetype name — bottom-anchored within gradient zone
-    // uses _getWrappedLines so multi-word names stack upward correctly
-    ctx.font = `800 ${r(76)}px Arial, sans-serif`;
-    ctx.letterSpacing = "-2px";
-    const nameLines  = _getWrappedLines(ctx, archName, W - r(112));
-    const nameLineH  = r(86);
-    const nameBottom = imgH - r(28); // baseline of last line
+    // archetype name — auto-sized so the longest word always fits, bottom-anchored
+    let fs = r(70);
+    const longestWord = archName.split(" ").reduce((a, b) => a.length > b.length ? a : b);
+    ctx.letterSpacing = "-1px";
+    while (fs > r(28)) {
+      ctx.font = `800 ${fs}px Arial, sans-serif`;
+      if (ctx.measureText(longestWord).width <= maxW) break;
+      fs -= 4;
+    }
+    const nameLines = _getWrappedLines(ctx, archName, maxW);
+    const nlh = Math.round(fs * 1.1);
+    const nameBottom = imgH - r(22);
     ctx.save();
-    ctx.shadowColor    = "rgba(0,0,0,0.92)";
-    ctx.shadowBlur     = r(6);
-    ctx.shadowOffsetY  = r(2);
     ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = "rgba(0,0,0,0.92)"; ctx.shadowBlur = r(6); ctx.shadowOffsetY = r(2);
     nameLines.forEach((line, i) => {
-      const y = nameBottom - (nameLines.length - 1 - i) * nameLineH;
-      ctx.fillText(line, r(56), y);
+      ctx.fillText(line, pad, nameBottom - (nameLines.length - 1 - i) * nlh);
     });
     ctx.restore();
 
-    // one-liner
-    ctx.fillStyle  = "#cccccc";
-    ctx.font       = `italic 400 ${r(32)}px Arial, sans-serif`;
+    // one-liner — flows downward from below image
+    ctx.fillStyle = "#cccccc";
+    ctx.font = `italic 400 ${r(28)}px Arial, sans-serif`;
     ctx.letterSpacing = "0px";
-    _wrap(ctx, `"${oneLiner}"`, r(56), imgH + r(44), W - r(112), r(40));
+    const olLines = _getWrappedLines(ctx, `"${oneLiner}"`, maxW);
+    let ty = imgH + r(46);
+    olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(37); });
 
-    // URL
+    // URL — short form, won't clip
     ctx.fillStyle = "#f0e830";
-    ctx.font      = `500 ${r(20)}px 'Courier New', monospace`;
-    ctx.letterSpacing = "0.5px";
-    ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), imgH + r(140));
+    ctx.font = `500 ${r(18)}px 'Courier New', monospace`;
+    ctx.letterSpacing = "0px";
+    ctx.fillText("prismaticlabs.ai", pad, ty + r(22));
 
-    // logo
-    _drawLogo(ctx, r(56), H - r(36));
+    // logo — bottom-right so it never collides with left-aligned text
+    if (_logoImg && _logoImg.naturalWidth) {
+      const logoW = r(80);
+      const logoH2 = Math.round(logoW * _logoImg.naturalHeight / _logoImg.naturalWidth);
+      const px = r(10), py = r(8);
+      const bw = logoW + px * 2, bh = logoH2 + py * 2;
+      const bx = W - pad - bw;
+      const by = H - r(28) - bh;
+      ctx.fillStyle = "#ffffff";
+      _roundRect(ctx, bx, by, bw, bh, r(7));
+      ctx.fill();
+      ctx.drawImage(_logoImg, bx + px, by + py, logoW, logoH2);
+    }
 
     _store(canvas, `ai-waste-receipt-${d.archetype}.png`);
   }
