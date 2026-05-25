@@ -5,8 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0a0a0a">
   <meta property="og:title" content="Get Your AI Waste Receipt">
-  <meta property="og:description" content="Find out which type of AI waster you are — and get a diagnosis.">
+  <meta property="og:description" content="Find out your AI waste pattern - and get a useful next step.">
+  <meta property="og:image" content="https://prismatic-labs.github.io/ai-waste-booth/share/cards/ai-waste-receipt.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <title>AI Waste Receipt — Prismatic Labs</title>
+  <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,7 +20,7 @@
 <div id="screen-fork" class="screen active">
   <div class="screen-inner">
     <div class="header-brand">
-      <span class="brand-mark">◈ PRISMATIC LABS</span>
+      <a class="brand-mark" href="https://prismaticlabs.ai" target="_blank" rel="noopener">◈ PRISMATIC LABS</a>
     </div>
     <div class="fork-hero">
       <h1 class="fork-title">AI WASTE<br>RECEIPT</h1>
@@ -70,7 +75,7 @@
 
     <!-- 2. Share / save buttons -->
     <div class="receipt-share-actions">
-      <button id="btn-share-card" class="btn-primary">Share image</button>
+      <button id="btn-share-card" class="btn-primary">Share result</button>
       <button id="btn-save-card" class="btn-secondary">Save image</button>
       <a id="btn-linkedin" class="btn-linkedin" href="#" target="_blank" rel="noopener">Share on LinkedIn</a>
       <p class="screenshot-fallback">Can't save? Screenshot this receipt.</p>
@@ -94,6 +99,11 @@
 <canvas id="share-canvas" style="display:none"></canvas>
 
 <!-- ──────────────────────────── SCRIPTS ─────────────────────────────── -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }
+</script>
 <script src="vendor/qrcode.min.js"></script>
 <script src="data.js"></script>
 <script src="config.js"></script>

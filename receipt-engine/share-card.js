@@ -6,6 +6,9 @@ const ShareCard = (() => {
 
   let _readyBlob = null;
   let _readyFilename = null;
+  let _shareUrl = null;
+  let _shareTitle = null;
+  let _shareText = null;
 
   // pre-load logo so it's ready by the time prepare() is called
   let _logoImg = null;
@@ -19,6 +22,9 @@ const ShareCard = (() => {
   function prepare(diagnosis) {
     _readyBlob = null;
     _readyFilename = null;
+    _shareUrl = _getShareUrl(diagnosis);
+    _shareTitle = _getShareTitle(diagnosis);
+    _shareText = _getShareText(diagnosis);
     // restore save button visibility in case it was hidden on a previous run
     const saveBtn = document.getElementById("btn-save-card");
     if (saveBtn) saveBtn.style.display = "";
@@ -43,31 +49,26 @@ const ShareCard = (() => {
     _drawCasualCard(canvas.getContext("2d"), diagnosis, canvas, img);
   }
 
-  // ── Called on share button click — uses pre-stored blob ────────────
+  // ── Share the public result URL so social platforms can scrape OG art ──
   function share() {
-    if (!_readyBlob) { _fallbackMsg(); return; }
+    if (!_shareUrl) { _fallbackMsg(); return; }
 
-    const file = new File([_readyBlob], _readyFilename, { type: "image/png" });
-
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    if (navigator.share) {
       navigator.share({
-        files: [file],
-        title: "My AI Waste Receipt",
-        text: "Find out which AI waster you are →",
-      }).catch(() => {
-        _downloadBlob(_readyBlob, _readyFilename);
-        _showDownloadNudge();
-      });
+        title: _shareTitle || "AI Waste Receipt",
+        text: _shareText || "Find out your AI waste pattern.",
+        url: _shareUrl,
+      }).catch(() => _copyShareLink());
       return;
     }
-    // desktop or no Web Share API — download and prompt user to upload
-    _downloadBlob(_readyBlob, _readyFilename);
-    _showDownloadNudge();
+
+    _copyShareLink();
   }
 
   function save() {
     if (!_readyBlob) { _fallbackMsg(); return; }
     _downloadBlob(_readyBlob, _readyFilename);
+    _showDownloadNudge();
   }
 
   // ── Casual share card ─────────────────────────────────────────────
@@ -105,13 +106,13 @@ const ShareCard = (() => {
     // yellow top bar + eyebrow label
     ctx.fillStyle = "#f0e830";
     ctx.fillRect(0, 0, W, 10);
-    ctx.font = `600 ${r(22)} 'Courier New', monospace`;
+    ctx.font = `600 ${r(22)}px 'Courier New', monospace`;
     ctx.letterSpacing = "3px";
     ctx.fillText("AI WASTE RECEIPT", r(56), r(58));
 
     // archetype name — bottom-anchored within gradient zone
     // uses _getWrappedLines so multi-word names stack upward correctly
-    ctx.font = `800 ${r(76)} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.font = `800 ${r(76)}px Arial, sans-serif`;
     ctx.letterSpacing = "-2px";
     const nameLines  = _getWrappedLines(ctx, archName, W - r(112));
     const nameLineH  = r(86);
@@ -129,13 +130,13 @@ const ShareCard = (() => {
 
     // one-liner
     ctx.fillStyle  = "#cccccc";
-    ctx.font       = `400 italic ${r(32)} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.font       = `italic 400 ${r(32)}px Arial, sans-serif`;
     ctx.letterSpacing = "0px";
     _wrap(ctx, `"${oneLiner}"`, r(56), imgH + r(44), W - r(112), r(40));
 
     // URL
     ctx.fillStyle = "#f0e830";
-    ctx.font      = `500 ${r(20)} 'Courier New', monospace`;
+    ctx.font      = `500 ${r(20)}px 'Courier New', monospace`;
     ctx.letterSpacing = "0.5px";
     ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), imgH + r(140));
 
@@ -153,17 +154,17 @@ const ShareCard = (() => {
     ctx.fillStyle = "#30f0c0"; ctx.fillRect(0, 0, W, 10);
 
     ctx.fillStyle = "#30f0c0";
-    ctx.font = `600 ${r(28)} 'Courier New', monospace`;
+    ctx.font = `600 ${r(28)}px 'Courier New', monospace`;
     ctx.letterSpacing = "4px";
     ctx.fillText("SILENT FAILURE RECEIPT", r(56), r(100));
 
     ctx.fillStyle = "#4a9a9a";
-    ctx.font = `400 ${r(36)} 'Courier New', monospace`;
+    ctx.font = `400 ${r(36)}px 'Courier New', monospace`;
     ctx.letterSpacing = "2px";
     ctx.fillText(d.suspectedPattern, r(56), r(200));
 
     ctx.fillStyle = "#ffffff";
-    ctx.font = `800 ${r(96)} -apple-system, BlinkMacSystemFont, sans-serif`;
+    ctx.font = `800 ${r(96)}px Arial, sans-serif`;
     ctx.letterSpacing = "-2px";
     _wrap(ctx, patName, r(56), r(340), W - r(112), r(110));
 
@@ -171,12 +172,12 @@ const ShareCard = (() => {
     ctx.beginPath(); ctx.moveTo(r(56), r(520)); ctx.lineTo(W - r(56), r(520)); ctx.stroke();
 
     ctx.fillStyle = "#4a9a9a";
-    ctx.font = `500 ${r(30)} 'Courier New', monospace`;
+    ctx.font = `500 ${r(30)}px 'Courier New', monospace`;
     ctx.letterSpacing = "2px";
     ctx.fillText("RISK", r(56), r(600));
 
     ctx.fillStyle = "#c0cfd0";
-    ctx.font = `400 ${r(38)} -apple-system, sans-serif`;
+    ctx.font = `400 ${r(38)}px Arial, sans-serif`;
     ctx.letterSpacing = "0px";
     _wrap(ctx, d.risk, r(56), r(660), W - r(112), r(48));
 
@@ -184,21 +185,21 @@ const ShareCard = (() => {
     ctx.beginPath(); ctx.moveTo(r(56), r(800)); ctx.lineTo(W - r(56), r(800)); ctx.stroke();
 
     ctx.fillStyle = "#4a9a9a";
-    ctx.font = `500 ${r(30)} 'Courier New', monospace`;
+    ctx.font = `500 ${r(30)}px 'Courier New', monospace`;
     ctx.letterSpacing = "2px";
     ctx.fillText("SECONDARY RISK", r(56), r(880));
 
     ctx.fillStyle = "#888888";
-    ctx.font = `italic 400 ${r(36)} -apple-system, sans-serif`;
+    ctx.font = `italic 400 ${r(36)}px Arial, sans-serif`;
     ctx.letterSpacing = "0px";
     _wrap(ctx, d.secondaryRisk, r(56), r(940), W - r(112), r(46));
 
     ctx.fillStyle = "#ffffff";
-    ctx.font = `600 ${r(40)} -apple-system, sans-serif`;
+    ctx.font = `600 ${r(40)}px Arial, sans-serif`;
     _wrap(ctx, "Is your system failing silently?", r(56), r(1160), W - r(112), r(50));
 
     ctx.fillStyle = "#30f0c0";
-    ctx.font = `500 ${r(32)} 'Courier New', monospace`;
+    ctx.font = `500 ${r(32)}px 'Courier New', monospace`;
     ctx.letterSpacing = "1px";
     ctx.fillText("prismatic-labs.github.io/ai-waste-booth", r(56), r(1240));
 
@@ -224,16 +225,9 @@ const ShareCard = (() => {
     const saveBtn  = document.getElementById("btn-save-card");
     if (!shareBtn || !saveBtn) return;
 
-    const testFile = new File([blob], "test.png", { type: "image/png" });
-    const canWebShare = !!(navigator.share && navigator.canShare && navigator.canShare({ files: [testFile] }));
-
-    if (canWebShare) {
-      shareBtn.textContent = "Share to Instagram / WhatsApp";
-      saveBtn.textContent  = "Save to Camera Roll";
-    } else {
-      shareBtn.textContent = "Download Image";
-      saveBtn.style.display = "none";
-    }
+    shareBtn.textContent = navigator.share ? "Share result" : "Copy result link";
+    saveBtn.textContent  = "Save image";
+    saveBtn.style.display = "";
   }
 
   // ── Logo badge (white pill, logo image inside) ─────────────────────
@@ -253,7 +247,7 @@ const ShareCard = (() => {
       ctx.drawImage(_logoImg, badgeX + padX, badgeY + padY, logoDrawW, logoDrawH);
     } else {
       ctx.fillStyle = "#555";
-      ctx.font = `400 ${r(24)} 'Courier New', monospace`;
+      ctx.font = `400 ${r(24)}px 'Courier New', monospace`;
       ctx.letterSpacing = "2px";
       ctx.fillText("◈ PRISMATIC LABS", x, bottomY - r(10));
     }
@@ -274,11 +268,44 @@ const ShareCard = (() => {
   }
 
   function _showDownloadNudge() {
+    const btn = document.getElementById("btn-save-card");
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = "Image saved";
+    setTimeout(() => { btn.textContent = orig; }, 3500);
+  }
+
+  function _copyShareLink() {
+    if (!_shareUrl) { _fallbackMsg(); return; }
+    const done = () => _showCopiedNudge();
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(_shareUrl).then(done).catch(() => _legacyCopy(_shareUrl, done));
+      return;
+    }
+
+    _legacyCopy(_shareUrl, done);
+  }
+
+  function _legacyCopy(text, done) {
+    const input = document.createElement("textarea");
+    input.value = text;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.left = "-9999px";
+    document.body.appendChild(input);
+    input.select();
+    try { document.execCommand("copy"); } catch (_) {}
+    document.body.removeChild(input);
+    done();
+  }
+
+  function _showCopiedNudge() {
     const btn = document.getElementById("btn-share-card");
     if (!btn) return;
     const orig = btn.textContent;
-    btn.textContent = "Downloaded! Upload it to LinkedIn or Instagram ↑";
-    setTimeout(() => { btn.textContent = orig; }, 4500);
+    btn.textContent = "Result link copied";
+    setTimeout(() => { btn.textContent = orig; }, 3500);
   }
 
   // ── Utilities ──────────────────────────────────────────────────────
@@ -325,9 +352,36 @@ const ShareCard = (() => {
     if (line) ctx.fillText(line, x, curY);
   }
 
+  function getShareUrl(diagnosis) {
+    return _getShareUrl(diagnosis);
+  }
+
+  function _getShareUrl(diagnosis) {
+    const base = "https://prismatic-labs.github.io/ai-waste-booth";
+    if (!diagnosis) return `${base}/`;
+    const key = diagnosis.isBuilder ? diagnosis.suspectedPattern : diagnosis.archetype;
+    return `${base}/share/${_slug(key)}/`;
+  }
+
+  function _getShareTitle(diagnosis) {
+    if (!diagnosis) return "AI Waste Receipt";
+    if (diagnosis.isBuilder) return `Silent Failure: ${_getPatternName(diagnosis.suspectedPattern)}`;
+    return `I got ${_getArchetypeName(diagnosis.archetype)}`;
+  }
+
+  function _getShareText(diagnosis) {
+    if (!diagnosis) return "Find out your AI waste pattern.";
+    if (diagnosis.isBuilder) return "Is your AI system failing silently?";
+    return "Find out your AI waste pattern.";
+  }
+
+  function _slug(value) {
+    return String(value || "").toLowerCase().replace(/_/g, "-");
+  }
+
   function _getArchetypeName(id) { return ARCHETYPES_DATA.find(x => x.id === id)?.name || id; }
   function _getOneLiner(id)      { return ARCHETYPES_DATA.find(x => x.id === id)?.oneLiner || ""; }
   function _getPatternName(id)   { return PATTERNS_DATA.find(x => x.id === id)?.name || id; }
 
-  return { prepare, share, save };
+  return { prepare, share, save, getShareUrl };
 })();

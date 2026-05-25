@@ -5,12 +5,13 @@ const Receipt = (() => {
 
   function render(diagnosis) {
     _renderSocialCard(diagnosis);
+    ShareCard.prepare(diagnosis);
     _renderPersonalReceipt(diagnosis);
     _renderCTASection(diagnosis);
 
     const shareBtn = document.getElementById("btn-share-card");
     if (shareBtn) {
-      shareBtn.textContent = "Share image";
+      shareBtn.textContent = "Share result";
       shareBtn.classList.toggle("builder-cta", diagnosis.isBuilder);
     }
   }
@@ -89,7 +90,6 @@ const Receipt = (() => {
     const lastDelay = lines[lines.length - 1]?.delay || 0;
     setTimeout(() => {
       _renderQR(diagnosis);
-      ShareCard.prepare(diagnosis);
     }, lastDelay + 80);
   }
 
@@ -113,8 +113,8 @@ const Receipt = (() => {
       container.innerHTML = `
         <a href="${_esc(upgradeUrl)}" class="btn-primary"
            target="_blank" rel="noopener">Clean up one GUI AI workflow — £15</a>
-        <p class="cta-supporting-line">Send one messy ChatGPT, Claude, or Copilot task.
-          We'll return a reusable workflow within 5 working days.</p>`;
+        <p class="cta-supporting-line">Bring one bounded GUI workflow: an email, summary, research brief, content draft,
+          or repeatable task. We return a reusable workflow and usage notes within 5 working days.</p>`;
     }
   }
 
@@ -144,11 +144,11 @@ const Receipt = (() => {
     d.humanFix.forEach((f, i) => push(`<span>${i + 1}. ${_esc(f)}</span>`));
     push(`<br><span class="receipt-rule">─────────────────────────────</span>`);
     push(`<span style="font-size:12px;font-weight:bold;color:#b8a800;">CLEAN UP ONE GUI AI WORKFLOW — £15</span>`);
-    push(`<span style="font-size:11px;color:#888;line-height:1.6;">Send one messy ChatGPT, Claude, or Copilot task. We'll return a reusable workflow within 5 working days.</span>`);
+    push(`<span style="font-size:11px;color:#888;line-height:1.6;">One bounded GUI workflow: an email, summary, research brief, content draft, or repeatable task. Includes a reusable workflow and usage notes. Not a full project, codebase, or giant research report.</span>`);
     push(`<span style="font-size:11px;color:#888;">Ox Tech Week offer · scan to claim</span>`);
     push(`<div id="receipt-qr-casual" class="receipt-qr" style="margin-top:8px;"></div>`);
     push(`<span class="receipt-rule">─────────────────────────────</span>`);
-    push(`<span style="font-size:10px;color:#888;">Prismatic Labs · prismaticlabs.ai</span>`);
+    push(`<a href="https://prismaticlabs.ai" target="_blank" rel="noopener" style="font-size:10px;color:#888;text-decoration:none;">Prismatic Labs · prismaticlabs.ai</a>`);
     push(`<span class="receipt-rule">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
 
     return lines;
@@ -186,7 +186,7 @@ const Receipt = (() => {
     push(`<span style="font-size:11px;font-weight:bold;letter-spacing:1px;color:#4a9a9a;">RUN A FREE VETCH SCAN</span>`);
     push(`<div id="receipt-qr-builder" class="receipt-qr"></div>`);
     push(`<span class="receipt-rule" style="color:#1e3a3a;">─────────────────────────────</span>`);
-    push(`<span style="font-size:10px;color:#4a6a6a;">Prismatic Labs · prismaticlabs.ai</span>`);
+    push(`<a href="https://prismaticlabs.ai" target="_blank" rel="noopener" style="font-size:10px;color:#4a6a6a;text-decoration:none;">Prismatic Labs · prismaticlabs.ai</a>`);
     push(`<span class="receipt-rule" style="color:#1e3a3a;">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
 
     return lines;

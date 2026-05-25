@@ -1,0 +1,11 @@
+{
+  "name": "AI Waste Receipt",
+  "short_name": "AI Receipt",
+  "description": "Get your AI waste diagnosis in under a minute.",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": []
+}

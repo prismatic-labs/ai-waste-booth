@@ -2,104 +2,104 @@
   {
     "id": "regeneration_goblin",
     "name": "Regeneration Goblin",
-    "oneLiner": "Asks the same question six ways, hoping the machine gets wiser.",
+    "oneLiner": "Keeps asking one more time, because the next version might finally click.",
     "symptoms": [
-      "Your chat is 40 messages long and you still don't have the paragraph you wanted",
-      "You've used the words 'actually', 'no wait', and 'try again' more than the AI has",
-      "You genuinely believe the seventh attempt will be the one"
+      "Your chat has become a small saga and the paragraph still isn't quite there",
+      "You've caught yourself typing 'almost' and 'one more try' more than once",
+      "Part of you believes the next regenerate button has the answer"
     ],
     "humanFix": [
-      "Write down what 'good' looks like before you start prompting",
-      "Give the AI one constraint at a time, not a wall of corrections",
-      "If it's not working after three tries, edit the output yourself — it's faster",
-      "Save the prompt that worked. You'll need it again."
+      "Write down what good looks like before you start prompting",
+      "Change one constraint at a time so the model can actually follow you",
+      "After three tries, switch from prompting to editing; it is often faster",
+      "Save the version that worked so future-you gets a shortcut"
     ],
-    "verdict": "You're not prompting. You're negotiating with a magic 8-ball."
+    "verdict": "The model is close. Your workflow just needs a finish line."
   },
   {
     "id": "context_hoarder",
     "name": "Context Hoarder",
-    "oneLiner": "Pastes everything because they don't know what matters.",
+    "oneLiner": "Brings the whole attic, just in case one dusty box matters.",
     "symptoms": [
-      "Your prompts regularly exceed the word count of a cover letter",
-      "You've copy-pasted an entire Notion page 'just for context'",
-      "The AI's response spends two paragraphs summarising what you gave it before doing anything"
+      "Your prompts sometimes look like they packed for a long weekend",
+      "You've pasted an entire doc 'just for context'",
+      "The AI spends half its answer summarising your context before helping"
     ],
     "humanFix": [
-      "Write one sentence describing what the AI actually needs to know to do this task",
-      "Cut your context in half. Then cut it in half again.",
-      "If you can't explain what each piece of context does, it probably doesn't need to be there",
-      "Build a short reusable system prompt instead of pasting everything each time"
+      "Write one sentence describing what the AI truly needs to know",
+      "Cut the context to the parts that change the answer",
+      "If you cannot say why a detail is included, park it for now",
+      "Keep a short reusable setup prompt instead of repasting the whole universe"
     ],
-    "verdict": "More context doesn't mean better answers. It means slower, blurrier answers."
+    "verdict": "Your instinct to be helpful is good. The context just needs a packing list."
   },
   {
     "id": "confident_hallucination_enjoyer",
-    "name": "Confident Hallucination Enjoyer",
-    "oneLiner": "Trusts the answer because it sounded like it wore a blazer.",
+    "name": "Confident Answer Collector",
+    "oneLiner": "Loves a polished answer, then remembers sources exist.",
     "symptoms": [
-      "You've sent an AI-written stat to a client without checking the source",
-      "You think 'it sounds authoritative' is a form of verification",
-      "You've been mildly surprised — but not that surprised — when something turned out to be made up"
+      "You've nearly used an AI stat before checking where it came from",
+      "Polished wording sometimes feels reassuring before the sources do",
+      "You've had the 'wait, does that actually exist?' moment"
     ],
     "humanFix": [
-      "Treat every factual claim from an AI like a first draft from an eager intern: plausible, but needs checking",
-      "Ask the AI to cite its sources — then actually look them up",
-      "For anything that matters, use AI for structure and do the research yourself",
-      "Build a quick 'does this actually exist?' check into your workflow for any fact you're about to use externally"
+      "Treat every factual claim from AI as a polished first draft",
+      "Ask for sources, then open the sources before using the claim",
+      "For anything external-facing, use AI for structure and do the verification yourself",
+      "Build a quick 'does this actually exist?' check into your workflow"
     ],
-    "verdict": "Confidence is not accuracy. The AI learned that from LinkedIn."
+    "verdict": "A confident sentence is a great first draft. It still needs a passport check."
   },
   {
     "id": "prompt_archaeologist",
     "name": "Prompt Archaeologist",
-    "oneLiner": "Spends more time finding old prompts than doing the work.",
+    "oneLiner": "Knows the perfect old prompt is in here somewhere.",
     "symptoms": [
-      "You have a 'prompts' folder somewhere, last organised never",
-      "You've typed the phrase 'there was this one prompt I used in March...'",
-      "Recovering an old prompt now takes longer than just writing the thing from scratch"
+      "You have a prompts folder that is more museum than system",
+      "You've said 'there was a version of this that worked...' and gone digging",
+      "Finding the old prompt can take longer than rewriting the task"
     ],
     "humanFix": [
       "Keep a single running doc of prompts that have worked, with one-line labels",
-      "If a prompt took more than three iterations to get right, it goes in the doc immediately",
-      "Review and cull the doc monthly — dead prompts are noise",
-      "Name prompts by outcome, not by date or topic ('client_email_first_reply' not 'GPT prompt 14 April')"
+      "If a prompt took more than three iterations to get right, save the final version immediately",
+      "Review and cull the doc monthly so old experiments do not crowd out useful ones",
+      "Name prompts by outcome, not date: client_email_first_reply beats GPT prompt 14 April"
     ],
-    "verdict": "A prompt graveyard is not a system. It's archaeology with extra steps."
+    "verdict": "The archive has treasures. It just needs labels."
   },
   {
     "id": "copy_paste_pilot",
     "name": "Copy-Paste Pilot",
-    "oneLiner": "Ferries AI output onward without really owning it.",
+    "oneLiner": "Lets the AI take the first lap, then forgets to grab the wheel.",
     "symptoms": [
-      "You could not explain the reasoning in the last thing you sent, but it looked fine",
-      "You've forwarded AI output that contained a placeholder you didn't notice",
-      "Your name is on work that, if pushed, you'd have to describe as 'the AI said'",
-      "Your editing contribution is mainly selecting and pressing Ctrl+C"
+      "You've sent something that looked fine, then noticed the placeholder later",
+      "You have skimmed an AI draft with trust in your heart and a deadline nearby",
+      "You could explain the output, but only after rereading it very carefully",
+      "Your editing sometimes starts and ends with selecting the useful bit"
     ],
     "humanFix": [
-      "Before you send anything AI-wrote, read it fully once as if you wrote every word",
-      "Change at least one sentence in every AI draft — not to improve it, but to own it",
-      "Ask yourself: could I defend this in a call? If not, it needs more work",
-      "Use AI to produce a first draft, not a final draft"
+      "Before you send an AI draft, read it once as if your name is on every word",
+      "Change at least one sentence so your judgment enters the room",
+      "Ask: could I defend this in a call? If not, give it another pass",
+      "Use AI to make a draft, then make the draft yours"
     ],
-    "verdict": "Relaying is not working. It's outsourcing your judgment."
+    "verdict": "The draft is helpful. The final still wants your fingerprints."
   },
   {
     "id": "improviser",
     "name": "The Improviser",
-    "oneLiner": "No repeatable process; every task starts from zero.",
+    "oneLiner": "Starts every AI task with jazz hands and a blank prompt box.",
     "symptoms": [
-      "Your approach to any AI task is 'see what happens'",
-      "You've solved the same problem three times without noticing it was the same problem",
-      "The phrase 'I'll just wing it' applies to most of your AI interactions"
+      "Your approach to AI often begins with 'let's see what happens'",
+      "You've solved the same task from scratch more than once",
+      "A workflow works beautifully, then disappears into browser history"
     ],
     "humanFix": [
-      "Next time something works, write down the steps before you close the tab",
-      "Identify the three AI tasks you do most often and build a simple template for each",
-      "Start every session with one sentence: 'I am trying to produce X for Y by doing Z'",
-      "Treat each successful AI task as a reusable workflow, not a one-off win"
+      "When something works, write down the steps before you close the tab",
+      "Pick the three AI tasks you repeat most and make a tiny template for each",
+      "Start each session with: I need X for Y, using Z",
+      "Treat a good result as a reusable recipe, not a lucky weather event"
     ],
-    "verdict": "Improvisation is a creative act. Doing it every time is just forgetting."
+    "verdict": "Improvisation is useful. A tiny repeatable pattern makes it useful twice."
   }
 ]

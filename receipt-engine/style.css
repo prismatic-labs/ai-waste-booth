@@ -50,7 +50,9 @@ body { min-height: 100dvh; overflow-x: hidden; }
   letter-spacing: 2px;
   color: var(--text-muted);
   text-transform: uppercase;
+  text-decoration: none;
 }
+.brand-mark:hover { color: var(--text-dim); }
 
 /* ── Fork screen ───────────────────────────────────────────────── */
 .fork-hero {
