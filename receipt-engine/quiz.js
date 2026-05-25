@@ -32,36 +32,67 @@ const Quiz = (() => {
   }
 
   // ── Q0: use case ───────────────────────────────────────────────────
+  const USE_CASE_OPTIONS = [
+    "Writing emails or messages",
+    "Summarising documents",
+    "Coding or debugging",
+    "Research and fact-finding",
+    "Brainstorming ideas",
+    "Creating content or images",
+  ];
+
   function _renderUseCase() {
     _setProgress(0, 4);
     const c = document.getElementById("quiz-container");
     c.innerHTML = `
-      <p class="quiz-question-text">What's one thing you use AI for?</p>
-      <input
-        id="use-case-input"
-        class="use-case-input"
-        type="text"
-        placeholder="e.g. writing emails, summarising docs, coding help…"
-        autocomplete="off"
-        maxlength="120"
-      >
-      <button id="use-case-next" class="quiz-next-btn" disabled>Next →</button>
+      <p class="quiz-question-text">What do you mainly use AI for?</p>
+      <div class="quiz-answers" id="use-case-answers"></div>
+      <div id="other-wrap" style="display:none;margin-top:10px;">
+        <input
+          id="use-case-other"
+          class="use-case-input"
+          type="text"
+          placeholder="Describe it briefly…"
+          autocomplete="off"
+          maxlength="80"
+        >
+        <button id="use-case-other-next" class="quiz-next-btn" disabled>Next →</button>
+      </div>
     `;
-    const input = document.getElementById("use-case-input");
-    const btn = document.getElementById("use-case-next");
-    input.addEventListener("input", () => {
-      btn.disabled = input.value.trim().length < 3;
+
+    const wrap = document.getElementById("use-case-answers");
+
+    USE_CASE_OPTIONS.forEach(label => {
+      const btn = document.createElement("button");
+      btn.className = "quiz-answer-btn";
+      btn.textContent = label;
+      btn.addEventListener("click", () => {
+        _useCase = label;
+        _currentStep = 1;
+        _renderQuestion(0);
+      });
+      wrap.appendChild(btn);
     });
-    input.addEventListener("keydown", e => {
-      if (e.key === "Enter" && !btn.disabled) btn.click();
+
+    // Other
+    const otherBtn = document.createElement("button");
+    otherBtn.className = "quiz-answer-btn";
+    otherBtn.textContent = "Other…";
+    otherBtn.addEventListener("click", () => {
+      wrap.style.display = "none";
+      document.getElementById("other-wrap").style.display = "block";
+      const input = document.getElementById("use-case-other");
+      const next = document.getElementById("use-case-other-next");
+      input.addEventListener("input", () => { next.disabled = input.value.trim().length < 3; });
+      input.addEventListener("keydown", e => { if (e.key === "Enter" && !next.disabled) next.click(); });
+      next.addEventListener("click", () => {
+        _useCase = input.value.trim();
+        _currentStep = 1;
+        _renderQuestion(0);
+      });
+      setTimeout(() => input.focus(), 100);
     });
-    btn.addEventListener("click", () => {
-      _useCase = input.value.trim();
-      _currentStep = 1;
-      _renderQuestion(_currentStep - 1);
-    });
-    // autofocus after slight delay (avoids iOS keyboard jumping)
-    setTimeout(() => input.focus(), 100);
+    wrap.appendChild(otherBtn);
   }
 
   // ── Q1–Q3: behaviour questions ─────────────────────────────────────
