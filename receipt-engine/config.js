@@ -1,7 +1,7 @@
 /* config.js — swap these URLs when services are configured */
 
 const CONFIG = {
-  UPGRADE_URL:      "https://placeholder-stripe.example.com",   // Stripe £15 Payment Link (casual CTA)
+  UPGRADE_URL:      "https://buy.stripe.com/9B6dRb55v7EX3jb4dXcQU00",   // Stripe £15 Payment Link (casual CTA)
   INTAKE_FORM_URL:  "https://placeholder-intake.example.com",   // Tally intake form (post-payment)
   VETCH_SCAN_URL:   "https://placeholder-vetch-scan.example.com", // Free Vetch scan (builder CTA)
   VETCH_REVIEW_URL: "https://placeholder-vetch-review.example.com", // Vetch review from £295
