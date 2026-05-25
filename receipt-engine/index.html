@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:title" content="Get Your AI Waste Receipt">
+  <meta property="og:description" content="Find out which type of AI waster you are — and get a diagnosis.">
+  <title>AI Waste Receipt — Prismatic Labs</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ───────────────────────── SCREEN 1: FORK ───────────────────────── -->
+<div id="screen-fork" class="screen active">
+  <div class="screen-inner">
+    <div class="header-brand">
+      <span class="brand-mark">◈ PRISMATIC LABS</span>
+    </div>
+    <div class="fork-hero">
+      <h1 class="fork-title">AI WASTE<br>RECEIPT</h1>
+      <p class="fork-subtitle">Get a diagnosis in under a minute.</p>
+    </div>
+    <p class="fork-question">Which one is you?</p>
+    <div class="fork-tiles">
+      <button class="fork-tile" data-fork="casual">
+        <span class="tile-icon">💬</span>
+        <span class="tile-label">I use AI tools<br><em>ChatGPT / Claude / Copilot</em></span>
+      </button>
+      <button class="fork-tile" data-fork="builder">
+        <span class="tile-icon">⚙️</span>
+        <span class="tile-label">I'm building something<br><em>that makes API calls for users</em></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────── SCREEN 2a: CASUAL QUIZ ─────────────────────── -->
+<div id="screen-casual" class="screen">
+  <div class="screen-inner">
+    <div class="quiz-progress">
+      <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+      <span id="progress-label" class="progress-label">Q 0 / 4</span>
+    </div>
+    <div id="quiz-container" class="quiz-container">
+      <!-- injected by quiz.js -->
+    </div>
+  </div>
+</div>
+
+<!-- ───────────────────── SCREEN 2b: BUILDER FLOW ────────────────────── -->
+<div id="screen-builder" class="screen">
+  <div class="screen-inner">
+    <div class="quiz-progress">
+      <div class="progress-bar"><div id="builder-progress-fill" class="progress-fill"></div></div>
+      <span id="builder-progress-label" class="progress-label">Step 1 / 2</span>
+    </div>
+    <div id="builder-container" class="quiz-container">
+      <!-- injected by app.js -->
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── SCREEN 3: RECEIPT REVEAL ─────────────────────── -->
+<div id="screen-receipt" class="screen">
+  <div class="screen-inner receipt-screen-inner">
+    <div id="receipt-container" class="receipt-container">
+      <!-- injected by receipt.js -->
+    </div>
+    <div class="receipt-actions">
+      <button id="btn-share-card" class="btn-primary">Save / Share Receipt</button>
+      <p class="screenshot-fallback">Can't save? Screenshot this receipt.</p>
+      <button id="btn-restart" class="btn-ghost">Start again</button>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────────────── CANVAS (off-screen, share card) ─────────────── -->
+<canvas id="share-canvas" style="display:none"></canvas>
+
+<!-- ──────────────────────────── SCRIPTS ─────────────────────────────── -->
+<script src="vendor/qrcode.min.js"></script>
+<script src="data.js"></script>
+<script src="config.js"></script>
+<script src="quiz.js"></script>
+<script src="diagnosis.js"></script>
+<script src="receipt.js"></script>
+<script src="share-card.js"></script>
+<script src="booth-mode.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prismatic Labs — AI Waste Receipt</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100dvh;
+      background: #0a0a0a;
+      color: #e8e8e8;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      text-align: center;
+    }
+    .mark {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: #555;
+      margin-bottom: 40px;
+    }
+    h1 {
+      font-family: 'Courier New', monospace;
+      font-size: clamp(28px, 8vw, 48px);
+      color: #f0e830;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+    .sub {
+      color: #888;
+      font-size: 16px;
+      margin-bottom: 48px;
+      max-width: 380px;
+    }
+    .form-wrap {
+      width: 100%;
+      max-width: 400px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #666;
+      text-align: left;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    input, select {
+      width: 100%;
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-size: 16px;
+      color: #e8e8e8;
+      font-family: inherit;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.15s;
+    }
+    input:focus, select:focus { border-color: #f0e830; }
+    input::placeholder { color: #444; }
+    select option { background: #141414; }
+    button[type="submit"] {
+      width: 100%;
+      background: #f0e830;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 4px;
+      transition: opacity 0.15s;
+    }
+    button[type="submit"]:hover { opacity: 0.85; }
+    .success {
+      display: none;
+      background: #141414;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 32px 24px;
+      color: #e8e8e8;
+    }
+    .success h2 {
+      font-family: 'Courier New', monospace;
+      color: #f0e830;
+      margin-bottom: 12px;
+    }
+    .success p { color: #888; font-size: 15px; line-height: 1.6; }
+    .footer {
+      margin-top: 48px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: #333;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <p class="mark">◈ PRISMATIC LABS</p>
+  <h1>AI WASTE<br>RECEIPT</h1>
+  <p class="sub">
+    The main booth experience is temporarily unavailable.<br>
+    Leave your details and we'll follow up.
+  </p>
+
+  <div class="form-wrap">
+    <form id="capture-form">
+      <label for="name">Your name</label>
+      <input id="name" name="name" type="text" placeholder="First name is fine" autocomplete="given-name" required>
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+
+      <label for="kind">You're mostly a…</label>
+      <select id="kind" name="kind">
+        <option value="">Select one</option>
+        <option value="casual">AI tools user (ChatGPT / Claude / Copilot)</option>
+        <option value="builder">Builder (making API calls for users)</option>
+        <option value="curious">Just curious</option>
+      </select>
+
+      <button type="submit">Send me my diagnosis →</button>
+    </form>
+
+    <div class="success" id="success-msg">
+      <h2>Got it.</h2>
+      <p>We'll send your AI Waste Receipt to that address within 24 hours.<br>Thanks for stopping by.</p>
+    </div>
+  </div>
+
+  <p class="footer">prismaticlabs.ai &nbsp;·&nbsp; Tech For All · Ox Tech Week 2026</p>
+
+  <script>
+    // Simple in-page submission — replace action with a Tally/Formspree endpoint if needed
+    const SUBMIT_URL = ""; // paste Tally or Formspree endpoint here, or leave blank for mailto fallback
+
+    document.getElementById("capture-form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(this).entries());
+
+      if (SUBMIT_URL) {
+        try {
+          await fetch(SUBMIT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+        } catch (_) {}
+      } else {
+        // mailto fallback
+        const body = encodeURIComponent(
+          `Name: ${data.name}\nEmail: ${data.email}\nType: ${data.kind || "not specified"}`
+        );
+        window.location.href = `mailto:marco.z.difraia@gmail.com?subject=AI+Waste+Receipt+Booth+Lead&body=${body}`;
+      }
+
+      this.style.display = "none";
+      document.getElementById("success-msg").style.display = "block";
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "diagnosis",
+  "type": "object",
+  "required": ["id", "timestamp", "isBuilder", "useCase", "ctaType"],
+  "properties": {
+    "id":        { "type": "string", "format": "uuid" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "isBuilder": { "type": "boolean" },
+    "useCase":   { "type": "string" },
+    "archetype": {
+      "type": "string",
+      "enum": ["regeneration_goblin","context_hoarder","confident_hallucination_enjoyer","prompt_archaeologist","copy_paste_pilot","improviser"]
+    },
+    "symptoms":  { "type": "array", "items": { "type": "string" } },
+    "humanFix":  { "type": "array", "items": { "type": "string" } },
+    "verdict":   { "type": "string" },
+    "appType":   { "type": "string" },
+    "concern":   { "type": "string" },
+    "suspectedPattern": {
+      "type": "string",
+      "enum": ["STALL-001","CACHE-001","RAG-001","BABBLE-001","ZOMBIE-001","CTX-001","EMPTY-001"]
+    },
+    "risk":          { "type": "string" },
+    "secondaryRisk": { "type": "string" },
+    "whatToCheck":   { "type": "array", "items": { "type": "string" } },
+    "ctaType": { "type": "string", "enum": ["upgrade_15","book_teardown"] }
+  }
+}

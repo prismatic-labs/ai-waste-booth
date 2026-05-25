@@ -1,0 +1,355 @@
+/* ── Reset & base ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0a0a0a;
+  --bg-2:      #141414;
+  --bg-card:   #1a1a1a;
+  --border:    #2a2a2a;
+  --border-lit:#3a3a3a;
+  --text:      #e8e8e8;
+  --text-dim:  #888;
+  --text-muted:#555;
+  --accent:    #f0e830;   /* receipt yellow */
+  --accent-2:  #30f0c0;   /* builder teal */
+  --danger:    #f04030;
+  --font-mono: 'Courier New', Courier, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --radius:    6px;
+  --max-w:     480px;
+}
+
+html { background: var(--bg); color: var(--text); font-family: var(--font-sans); }
+body { min-height: 100dvh; overflow-x: hidden; }
+
+/* ── Screen routing ────────────────────────────────────────────── */
+.screen {
+  display: none;
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0)
+           env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+}
+.screen.active { display: flex; flex-direction: column; }
+.screen-inner {
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* ── Brand header ──────────────────────────────────────────────── */
+.header-brand {
+  margin-bottom: 40px;
+}
+.brand-mark {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ── Fork screen ───────────────────────────────────────────────── */
+.fork-hero {
+  margin-bottom: 32px;
+}
+.fork-title {
+  font-family: var(--font-mono);
+  font-size: clamp(36px, 10vw, 56px);
+  line-height: 1;
+  letter-spacing: -1px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.fork-subtitle {
+  color: var(--text-dim);
+  font-size: 15px;
+}
+.fork-question {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.fork-tiles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+.fork-tile {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: border-color 0.15s, background 0.15s;
+  color: var(--text);
+  font-family: inherit;
+}
+.fork-tile:hover, .fork-tile:focus-visible {
+  border-color: var(--accent);
+  background: #1e1e12;
+  outline: none;
+}
+.fork-tile:active { transform: scale(0.98); }
+.tile-icon { font-size: 28px; flex-shrink: 0; }
+.tile-label { font-size: 15px; line-height: 1.4; }
+.tile-label em { font-style: normal; color: var(--text-dim); font-size: 13px; }
+
+/* ── Progress bar ──────────────────────────────────────────────── */
+.quiz-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.progress-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+.progress-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ── Quiz container ────────────────────────────────────────────── */
+.quiz-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.quiz-question-text {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+.quiz-answers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.quiz-answer-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text);
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+.quiz-answer-btn:hover, .quiz-answer-btn:focus-visible {
+  border-color: var(--accent);
+  background: #1e1e12;
+  outline: none;
+}
+.quiz-answer-btn:active { transform: scale(0.99); }
+.quiz-answer-btn.selected {
+  border-color: var(--accent);
+  background: #1e1e12;
+  color: var(--accent);
+}
+
+/* Use case input */
+.use-case-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  font-size: 16px;
+  color: var(--text);
+  font-family: inherit;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s;
+  margin-bottom: 12px;
+}
+.use-case-input:focus { border-color: var(--accent); }
+.use-case-input::placeholder { color: var(--text-muted); }
+
+.quiz-next-btn {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: var(--radius);
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 12px;
+  transition: opacity 0.15s;
+}
+.quiz-next-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.quiz-next-btn:not(:disabled):hover { opacity: 0.85; }
+
+/* ── Receipt screen ────────────────────────────────────────────── */
+.receipt-screen-inner {
+  padding-top: 16px;
+  padding-bottom: 32px;
+}
+.receipt-container {
+  margin-bottom: 24px;
+}
+
+/* ── Receipt card ──────────────────────────────────────────────── */
+.receipt-card {
+  background: #f5f0e8;
+  color: #111;
+  border-radius: 4px;
+  padding: 28px 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  position: relative;
+  overflow: hidden;
+}
+.receipt-card.builder {
+  background: #0d1117;
+  color: #c0cfd0;
+  border: 1px solid #1e3a3a;
+}
+
+/* receipt print animation */
+.receipt-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.receipt-line.visible { opacity: 1; transform: none; }
+
+/* receipt sections */
+.receipt-rule { color: #999; letter-spacing: 0; }
+.receipt-card.builder .receipt-rule { color: #2a4040; }
+.receipt-label { color: #888; font-size: 11px; letter-spacing: 1px; }
+.receipt-card.builder .receipt-label { color: #4a6a6a; }
+.receipt-archetype-name { font-size: 20px; font-weight: bold; color: #111; letter-spacing: -0.5px; }
+.receipt-card.builder .receipt-archetype-name { color: var(--accent-2); font-size: 16px; }
+.receipt-verdict { font-style: italic; color: #555; }
+.receipt-card.builder .receipt-verdict { color: #888; }
+
+/* archetype image in receipt */
+.receipt-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  float: right;
+  margin: 0 0 8px 12px;
+  border-radius: 3px;
+  filter: grayscale(60%);
+  opacity: 0.85;
+}
+.receipt-img-placeholder {
+  width: 80px;
+  height: 80px;
+  float: right;
+  margin: 0 0 8px 12px;
+  background: var(--border);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+.clearfix::after { content: ''; display: table; clear: both; }
+
+/* QR code in receipt */
+.receipt-qr {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 4px;
+}
+.receipt-qr-image { flex-shrink: 0; }
+.receipt-qr-image canvas,
+.receipt-qr-image img { display: block; }
+.receipt-cta-text { font-size: 11px; line-height: 1.5; color: #555; max-width: 180px; }
+.receipt-card.builder .receipt-cta-text { color: #4a6a6a; }
+
+/* ── Action buttons ────────────────────────────────────────────── */
+.receipt-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  max-width: 320px;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-primary.builder-cta {
+  background: var(--accent-2);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 24px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-ghost:hover { border-color: var(--border-lit); color: var(--text-dim); }
+.screenshot-fallback {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ── Booth mode ────────────────────────────────────────────────── */
+body.booth-mode {
+  background: var(--bg);
+}
+body.booth-mode .screen-inner {
+  max-width: 640px;
+}
+body.booth-mode .receipt-card {
+  font-size: 16px;
+}
+body.booth-mode .receipt-archetype-name {
+  font-size: 28px;
+}
+
+/* ── Utility ───────────────────────────────────────────────────── */
+.hidden { display: none !important; }

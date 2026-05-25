@@ -1,0 +1,34 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "text": "When the AI answer is nearly useful, what do you do next?",
+      "answers": [
+        { "id": "q1a", "text": "Ask again, but slightly differently.",        "weights": { "regeneration_goblin": 3 } },
+        { "id": "q1b", "text": "Paste more context and hope that unlocks it.", "weights": { "context_hoarder": 3 } },
+        { "id": "q1c", "text": "Copy the best bit and keep moving.",           "weights": { "copy_paste_pilot": 2, "confident_hallucination_enjoyer": 1 } },
+        { "id": "q1d", "text": "Start over with a totally new angle.",         "weights": { "improviser": 3 } }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "Before starting a new AI task, what do you usually use?",
+      "answers": [
+        { "id": "q2a", "text": "An old prompt I vaguely remember working.",    "weights": { "prompt_archaeologist": 3 } },
+        { "id": "q2b", "text": "A heroic pile of docs, notes, and links.",     "weights": { "context_hoarder": 2, "confident_hallucination_enjoyer": 1 } },
+        { "id": "q2c", "text": "Whatever sentence comes to mind first.",       "weights": { "improviser": 2, "regeneration_goblin": 1 } },
+        { "id": "q2d", "text": "A quick prompt, then I tidy the result later.","weights": { "copy_paste_pilot": 2, "prompt_archaeologist": 1 } }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "What makes an AI answer feel ready to use?",
+      "answers": [
+        { "id": "q3a", "text": "I have checked the facts, logic, and tone.",       "weights": { "prompt_archaeologist": 2, "context_hoarder": 1 } },
+        { "id": "q3b", "text": "It sounds polished and oddly persuasive.",          "weights": { "confident_hallucination_enjoyer": 3 } },
+        { "id": "q3c", "text": "It is the best of several regenerated versions.",   "weights": { "regeneration_goblin": 3 } },
+        { "id": "q3d", "text": "It looks good enough to copy-paste onward.",        "weights": { "copy_paste_pilot": 2, "confident_hallucination_enjoyer": 1 } }
+      ]
+    }
+  ]
+}
