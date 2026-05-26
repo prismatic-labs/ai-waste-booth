@@ -13,8 +13,8 @@ const CONCERNS = [
   { id: "slow",        label: "It's slow or costs too much" },
   { id: "cost",        label: "Token / API costs are climbing" },
   { id: "bad_answers", label: "Output quality is poor" },
-  { id: "black_box",   label: "It's a black box — I can't tell why it fails" },
-  { id: "not_sure",    label: "Not sure — something feels off" },
+  { id: "black_box",   label: "It's a black box - I can't tell why it fails" },
+  { id: "not_sure",    label: "Not sure - something feels off" },
 ];
 
 // ── State ──────────────────────────────────────────────────────────────

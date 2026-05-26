@@ -108,12 +108,12 @@ const Receipt = (() => {
         <a href="${_esc(vetchScanUrl)}" class="btn-primary builder-cta"
            target="_blank" rel="noopener">Run a free Vetch scan</a>
         <a href="${_esc(vetchRevUrl)}" class="btn-secondary"
-           target="_blank" rel="noopener">Book a Vetch review — from £295</a>`;
+           target="_blank" rel="noopener">Book a Vetch review - from £295</a>`;
     } else {
       container.innerHTML = `
         <a href="${_esc(upgradeUrl)}" class="btn-primary"
-           target="_blank" rel="noopener">Fix one AI workflow — £15</a>
-        <p class="cta-supporting-line">Send us one task you repeat with AI. We return a tested prompt template and a short guide — what it does, how to adapt it, what to watch for. Delivered in 5 working days.</p>`;
+           target="_blank" rel="noopener">Fix one AI workflow - £15</a>
+        <p class="cta-supporting-line">Send us one task you repeat with AI. We return a tested prompt template and a short guide: what it does, how to adapt it, what to watch for. Delivered in 5 working days.</p>`;
     }
   }
 
@@ -166,7 +166,7 @@ const Receipt = (() => {
     push(`<span class="receipt-label">DATE</span><br><span>${dateStr}</span>`);
     push(`<br><span class="receipt-rule" style="color:#1e3a3a;">─────────────────────────────</span>`);
     push(`<span class="receipt-label">SUSPECTED FAILURE PATTERN</span>`);
-    push(`<span class="receipt-archetype-name">${_esc(d.suspectedPattern)} — ${_esc(patternName)}</span>`);
+    push(`<span class="receipt-archetype-name">${_esc(d.suspectedPattern)} - ${_esc(patternName)}</span>`);
     push(`<br>`);
     push(`<span class="receipt-label">RISK</span>`);
     push(`<span>${_esc(d.risk)}</span>`);
