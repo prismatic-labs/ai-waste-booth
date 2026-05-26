@@ -154,32 +154,22 @@ const ShareCard = (() => {
     let ty = barH + imgH + r(30);
     olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(28); });
 
-    // ── Bottom: two clean rows ────────────────────────────────────
-    // Row 1: "AI WASTE RECEIPT" — muted label
-    const row1Y = ty + r(16);
-    ctx.fillStyle = "#444";
-    ctx.font = `500 ${r(11)}px 'Courier New', monospace`;
-    ctx.letterSpacing = "2px";
-    ctx.fillText("AI WASTE RECEIPT", pad, row1Y);
-
-    // Row 2: logo + URL
-    const row2Y = row1Y + r(22);
+    // ── Bottom: single lockup — logo icon + URL, matched optical size ──
+    const lockupY = ty + r(20);
+    ctx.fillStyle = "#f0e830";
+    ctx.font = `500 ${r(14)}px 'Courier New', monospace`;
+    ctx.letterSpacing = "0px";
+    const textH = r(14); // cap-height approximation
     if (_logoImg && _logoImg.naturalWidth) {
-      const logoH2 = r(18);
+      const logoH2 = textH;
       const logoW = Math.round(logoH2 * _logoImg.naturalWidth / _logoImg.naturalHeight);
       ctx.save();
-      ctx.shadowColor = "rgba(0,0,0,0.8)"; ctx.shadowBlur = r(6);
-      ctx.drawImage(_logoImg, pad, row2Y - logoH2 + r(2), logoW, logoH2);
+      ctx.shadowColor = "rgba(0,0,0,0.6)"; ctx.shadowBlur = r(4);
+      ctx.drawImage(_logoImg, pad, lockupY - logoH2, logoW, logoH2);
       ctx.restore();
-      ctx.fillStyle = "#f0e830";
-      ctx.font = `500 ${r(14)}px 'Courier New', monospace`;
-      ctx.letterSpacing = "0px";
-      ctx.fillText("prismaticlabs.ai", pad + logoW + r(8), row2Y);
+      ctx.fillText("prismaticlabs.ai", pad + logoW + r(6), lockupY);
     } else {
-      ctx.fillStyle = "#f0e830";
-      ctx.font = `500 ${r(14)}px 'Courier New', monospace`;
-      ctx.letterSpacing = "0px";
-      ctx.fillText("prismaticlabs.ai", pad, row2Y);
+      ctx.fillText("prismaticlabs.ai", pad, lockupY);
     }
 
     _store(canvas, `ai-waste-archetype-${d.archetype}.png`);
