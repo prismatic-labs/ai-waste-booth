@@ -4,80 +4,80 @@ const ARCHETYPES_DATA = [
   {
     "id": "regeneration_goblin",
     "name": "Regeneration Goblin",
-    "oneLiner": "Keeps asking one more time - the next version is always nearly there.",
+    "oneLiner": "Keeps giving the idea one more chance, because the next version really might land.",
     "symptoms": [
-      "Your chat has become a small saga and the paragraph still isn't quite there",
-      "You've caught yourself typing 'almost' and 'one more try' more than once",
-      "You know the answer is in there somewhere - the next attempt might just land it"
+      "Your chat has become a small saga - and you can feel the answer getting closer",
+      "You've tried one more wording, then one more after that, with genuine optimism",
+      "At some point you stopped counting attempts and just trusted the process"
     ],
     "humanFix": [
-      "Write down what good looks like before you start prompting",
-      "Change one thing at a time so the model can follow you",
-      "After three tries, switch from prompting to editing - it is often faster",
+      "Write down what good enough looks like before you start prompting",
+      "Change one thing at a time so each retry actually teaches you something",
+      "After three tries, switch from generating to editing - you are probably close",
       "Save the version that worked so future-you gets a shortcut"
     ],
-    "verdict": "The model is close. Your workflow just needs a finish line."
+    "verdict": "The model is close. Give your optimism a finish line."
   },
   {
     "id": "context_hoarder",
     "name": "Context Hoarder",
-    "oneLiner": "Brings the whole attic, just in case one dusty box matters.",
+    "oneLiner": "Brings the full picture, because missing context feels worse than too much context.",
     "symptoms": [
       "Your prompts sometimes look like they packed for a long weekend",
-      "You've pasted an entire doc 'just for context'",
-      "The AI spends half its answer summarising what you gave it before helping"
+      "You've pasted an entire doc 'just in case one detail matters'",
+      "The AI occasionally spends more time with the context than the question"
     ],
     "humanFix": [
-      "Write one sentence describing what the AI truly needs to know",
-      "Cut the context down to the parts that actually change the answer",
-      "If you cannot say why a detail is in there, it can probably wait",
-      "Keep a short reusable setup prompt you can reach for straight away"
+      "Start with one sentence describing what the AI truly needs to know",
+      "Add only the context that would actually change the answer",
+      "Park nice-to-have background under 'extra if needed'",
+      "Keep a short reusable setup prompt for your most common tasks"
     ],
-    "verdict": "Your instinct to give the full picture is good. The context just needs a packing list."
+    "verdict": "Your instinct to give the full picture is generous. The context just needs a packing list."
   },
   {
     "id": "confident_hallucination_enjoyer",
     "name": "Confident Answer Collector",
-    "oneLiner": "Loves a polished answer - then remembers sources exist.",
+    "oneLiner": "Spots a polished answer quickly, then gives it the source-check it deserves.",
     "symptoms": [
       "You've nearly used an AI stat before checking where it came from",
-      "Polished wording sometimes feels reassuring before the sources do",
-      "You've had the 'wait, does that actually exist?' moment"
+      "Polished wording can feel reassuring before the sources have caught up",
+      "You've had that useful little pause: 'actually, let me just check that exists'"
     ],
     "humanFix": [
-      "Treat every factual claim from AI as a well-written first draft",
+      "Treat factual claims from AI as well-written first drafts",
       "Ask for sources, then open the sources before using the claim",
-      "For anything external-facing, use AI for structure and verify the facts yourself",
+      "For anything external-facing, let AI shape the structure while you verify the facts",
       "Build a quick 'does this actually exist?' check into your workflow"
     ],
-    "verdict": "A confident sentence is a great first draft. It just needs a passport check."
+    "verdict": "A confident sentence is a great first draft. Give it a friendly passport check."
   },
   {
     "id": "prompt_archaeologist",
     "name": "Prompt Archaeologist",
-    "oneLiner": "Knows the perfect old prompt is in here somewhere.",
+    "oneLiner": "Knows past experiments contain treasure, and goes looking for the useful bits.",
     "symptoms": [
       "You have a prompts folder that is more museum than system",
       "You've said 'there was a version of this that worked...' and gone digging",
-      "Finding the old prompt can take longer than just rewriting the task"
+      "The search occasionally takes longer than just writing the prompt fresh"
     ],
     "humanFix": [
       "Keep a single running doc of prompts that worked, with one-line labels",
       "If a prompt took more than three tries to get right, save the final version immediately",
-      "Cull the doc occasionally so old experiments do not crowd out the useful ones",
+      "Prune the doc occasionally so old experiments do not crowd out the useful ones",
       "Name prompts by outcome, not date - client-email-first-reply beats 'GPT prompt 14 April'"
     ],
-    "verdict": "The archive has real treasures. It just needs better labels."
+    "verdict": "The archive has real treasure. A few labels will help it shine."
   },
   {
     "id": "copy_paste_pilot",
     "name": "Copy-Paste Pilot",
     "oneLiner": "First to have a draft, last to read it twice.",
     "symptoms": [
-      "You've sent something that looked fine, then noticed the placeholder later",
-      "You trust your eye to catch what matters on a quick read-through",
-      "You move fast - AI gives you a head start and you take it",
-      "Deadlines make the 'good enough' call feel very reasonable"
+      "You've sent something that looked fine, then spotted the placeholder two minutes later",
+      "You trust your eye to catch what matters on a quick read-through - and mostly it does",
+      "The edit window sometimes closes a little faster than the document deserves",
+      "A deadline and a solid first draft are a very persuasive combination"
     ],
     "humanFix": [
       "Before you send an AI draft, read it once as if your name is on every word",
@@ -85,16 +85,16 @@ const ARCHETYPES_DATA = [
       "Ask: could I defend this in a call? If not, give it one more pass",
       "Use AI to make a draft, then make the draft yours"
     ],
-    "verdict": "The draft is helpful. The final still wants your fingerprints."
+    "verdict": "The draft is helpful. The final gets stronger with your fingerprints."
   },
   {
     "id": "improviser",
     "name": "The Improviser",
     "oneLiner": "Starts every AI task with jazz hands and a blank prompt box.",
     "symptoms": [
-      "Every session starts fresh - you like to see where it goes",
-      "You've solved the same task from scratch more than once",
-      "A workflow works beautifully, then disappears into browser history"
+      "Every session starts fresh - you like to follow the task as it unfolds",
+      "You've definitely solved the same thing from scratch at least twice",
+      "A workflow works beautifully, then quietly disappears into browser history"
     ],
     "humanFix": [
       "When something works, write down the steps before you close the tab",
@@ -102,7 +102,7 @@ const ARCHETYPES_DATA = [
       "Start each session with: I need X for Y, using Z",
       "A result that worked once can work every time - write it down"
     ],
-    "verdict": "Improvisation is a real skill. A tiny repeatable pattern makes it work for you twice."
+    "verdict": "Improvisation is a real skill. A tiny repeatable pattern lets it help you twice."
   }
 ];
 
