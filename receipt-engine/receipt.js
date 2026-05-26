@@ -1,4 +1,4 @@
-/* receipt.js — social card + personal receipt, both layouts */
+/* receipt.js - social card + personal receipt, both layouts */
 
 const Receipt = (() => {
   const SOCIAL_CARD_DELAY = 500; // receipt starts after social card fades in
@@ -46,13 +46,13 @@ const Receipt = (() => {
             <img class="social-card-img" src="${imgSrc}" alt="${_esc(archName)}"
                  onerror="this.parentElement.style.background='#1a1a2e'">
             <div class="social-card-overlay">
-              <span class="social-card-eyebrow">AI WASTE RECEIPT</span>
+              <span class="social-card-eyebrow">AI WASTE ARCHETYPE</span>
               <span class="social-card-name">${_esc(archName)}</span>
               <span class="social-card-oneliner">"${_esc(oneLiner)}"</span>
             </div>
           </div>
           <div class="social-card-footer">
-            <span class="social-card-hook">Which one are you?</span>
+            <span class="social-card-hook">Which tiny AI habit creature are you?</span>
             <span class="social-card-url">prismatic-labs.github.io/ai-waste-booth</span>
           </div>
         </div>`;
@@ -115,15 +115,15 @@ const Receipt = (() => {
            onclick="if(typeof gtag==='function')gtag('event','cta_clicked',{cta:'vetch_review'})">Book a Vetch review - from £295</a>`;
     } else {
       container.innerHTML = `
-        <p class="cta-section-label">Want to fix it?</p>
+        <p class="cta-section-label">Want one calmer workflow?</p>
         <a href="${_esc(upgradeUrl)}" class="btn-primary"
            target="_blank" rel="noopener"
            onclick="if(typeof gtag==='function')gtag('event','cta_clicked',{cta:'upgrade_15'})">Upgrade one AI workflow - £15</a>
-        <p class="cta-supporting-line">Send us one task you repeat with AI. We return a prompt that works — plus a short guide to what your archetype is leaving on the table. Delivered in 5 working days.</p>`;
+        <p class="cta-supporting-line">Send us one AI task you repeat. We turn it into a reusable mini-workflow: the prompt, the finish line, the iteration rules, and how to adapt the pattern to similar tasks. Delivered in 5 working days.</p>`;
     }
   }
 
-  // ── Casual receipt — personal diagnosis only ───────────────────────
+  // ── Casual receipt - personal diagnosis only ───────────────────────
   function _buildCasualLines(d) {
     const dateStr = _fmtDate(d.timestamp);
 
@@ -133,7 +133,7 @@ const Receipt = (() => {
     const push = (html) => { lines.push({ html, delay: t }); t += step; };
 
     push(`<span class="receipt-rule">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
-    push(`<span style="text-align:center;display:block;font-size:11px;letter-spacing:2px;color:#888;">YOUR DIAGNOSIS</span>`);
+    push(`<span style="text-align:center;display:block;font-size:11px;letter-spacing:2px;color:#888;">YOUR AI WASTE ARCHETYPE</span>`);
     push(`<span class="receipt-rule">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
     push(`<br>`);
     push(`<span class="receipt-label">USE CASE</span><br><span>${_esc(d.useCase)}</span>`);
@@ -145,7 +145,7 @@ const Receipt = (() => {
     push(`<span class="receipt-label">VERDICT</span>`);
     push(`<span class="receipt-verdict">"${_esc(d.verdict)}"</span>`);
     push(`<br>`);
-    push(`<span class="receipt-label">FIX WORKFLOW</span>`);
+    push(`<span class="receipt-label">WHAT TO TRY NEXT</span>`);
     d.humanFix.forEach((f, i) => push(`<span>${i + 1}. ${_esc(f)}</span>`));
     push(`<br><span class="receipt-rule">─────────────────────────────</span>`);
     push(`<a href="https://prismaticlabs.ai" target="_blank" rel="noopener" style="font-size:10px;color:#888;text-decoration:none;">Prismatic Labs · prismaticlabs.ai</a>`);
@@ -154,7 +154,7 @@ const Receipt = (() => {
     return lines;
   }
 
-  // ── Builder receipt — silent failure report ────────────────────────
+  // ── Builder receipt - silent failure report ────────────────────────
   function _buildBuilderLines(d) {
     const dateStr     = _fmtDate(d.timestamp);
     const patternName = _getPatternName(d.suspectedPattern);
@@ -231,7 +231,7 @@ const Receipt = (() => {
     if (!el) return;
     if (d.isBuilder) { el.textContent = ""; return; }
     const archName = _getArchetypeName(d.archetype);
-    el.textContent = `Know someone who is definitely a ${archName}? Send them this.`;
+    el.textContent = `Know someone who might be a ${archName}? Send them this.`;
   }
 
   // ── Helpers ────────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 {
-  "name": "AI Waste Receipt",
-  "short_name": "AI Receipt",
-  "description": "Get your AI waste diagnosis in under a minute.",
+  "name": "AI Waste Archetypes",
+  "short_name": "AI Archetypes",
+  "description": "Find the AI habits that quietly waste time, context, and compute.",
   "start_url": "./",
   "display": "standalone",
   "orientation": "portrait",

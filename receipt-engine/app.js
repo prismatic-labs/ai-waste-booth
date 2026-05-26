@@ -1,4 +1,4 @@
-/* app.js — screen router and builder diagnostic flow */
+/* app.js - screen router and builder diagnostic flow */
 
 const APP_TYPES = [
   { id: "support_bot",  label: "Support bot / chatbot" },
@@ -129,21 +129,39 @@ document.getElementById("btn-save-card").addEventListener("click",  () => { _ga(
 
 function _updateLinkedIn(diagnosis) {
   const url = _getLinkedInResultUrl(diagnosis);
+  const postText = _getLinkedInPostText(diagnosis, url);
+  const liBtn = document.getElementById("btn-linkedin");
+  liBtn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+  liBtn.dataset.postText = postText;
+  liBtn.onclick = () => {
+    _ga("share_clicked", { method: "linkedin" });
+    _copyLinkedInPostText(liBtn);
+  };
+}
+
+function _getLinkedInPostText(diagnosis, url) {
   const name = diagnosis.isBuilder
     ? (diagnosis.suspectedPattern || "a silent failure")
     : (ARCHETYPES_DATA.find(a => a.id === diagnosis.archetype)?.name || "");
   const opener = diagnosis.isBuilder
-    ? `I just got a suspected "${name}" signal from the AI Waste Receipt booth by Prismatic Labs.`
+    ? `I just got a suspected "${name}" signal from the AI Waste Archetypes booth by Prismatic Labs.`
     : `My AI waste archetype is "${name}" at the booth by Prismatic Labs.`;
-  const text = encodeURIComponent(
-    `${opener}
+  return `${opener}
 
-Find your AI waste archetype:
-${url}`
-  );
-  const liBtn = document.getElementById("btn-linkedin");
-  liBtn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${text}`;
-  liBtn.onclick = () => _ga("share_clicked", { method: "linkedin" });
+It is a playful way to spot the tiny AI habits that quietly waste time, context, and compute.
+
+Find yours:
+${url}`;
+}
+
+function _copyLinkedInPostText(btn) {
+  const text = btn.dataset.postText;
+  if (!text || !navigator.clipboard?.writeText) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = "Post text copied";
+    setTimeout(() => { btn.textContent = orig; }, 3500);
+  }).catch(() => {});
 }
 
 function _getLinkedInResultUrl(diagnosis) {

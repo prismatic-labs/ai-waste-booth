@@ -98,6 +98,9 @@ body { min-height: 100dvh; overflow-x: hidden; }
 .fork-subtitle {
   color: var(--text-dim);
   font-size: 15px;
+  line-height: 1.5;
+  max-width: 360px;
+  margin: 0 auto 18px;
 }
 .fork-question {
   font-size: 17px;

@@ -1,8 +1,8 @@
-/* share-card.js — canvas share card, pre-generated on receipt render */
+/* share-card.js - canvas share card, pre-generated on receipt render */
 
 const ShareCard = (() => {
   const W = 1080;
-  const H = 1350; // 4:5 portrait — native Instagram / LinkedIn format
+  const H = 1350; // 4:5 portrait - native Instagram / LinkedIn format
 
   let _readyBlob = null;
   let _readyFilename = null;
@@ -102,8 +102,8 @@ const ShareCard = (() => {
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0, 0, W, H);
 
-    // ── Name (hero) — font sized to fit, barH derived from result ──
-    let fs = r(52); // r(52) ≈ 130px in a 1080px canvas — legible hero size
+    // ── Name (hero) - font sized to fit, barH derived from result ──
+    let fs = r(52); // r(52) ≈ 130px in a 1080px canvas - legible hero size
     const longestWord = archName.split(" ").reduce((a, b) => a.length > b.length ? a : b);
     ctx.letterSpacing = "-1px";
     while (fs > r(26)) {
@@ -125,7 +125,7 @@ const ShareCard = (() => {
       ctx.fillText(line, pad, r(32) + fs + i * nlh);
     });
 
-    // ── Illustration — fills space between name and bottom reserve ──
+    // ── Illustration - fills space between name and bottom reserve ──
     const bottomReserve = r(155); // enough for one-liner + branding
     const imgH = Math.max(H - barH - bottomReserve, Math.round(H * 0.33));
     if (img) {

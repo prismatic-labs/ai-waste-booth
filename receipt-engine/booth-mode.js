@@ -1,4 +1,4 @@
-/* booth-mode.js — fullscreen display enhancements for the booth laptop */
+/* booth-mode.js - fullscreen display enhancements for the booth laptop */
 
 // Add ?booth to URL to activate booth mode
 // e.g. index.html?booth

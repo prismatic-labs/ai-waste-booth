@@ -1,4 +1,4 @@
-/* quiz.js — casual quiz flow: use case Q0, then Q1-Q3 weighted */
+/* quiz.js - casual quiz flow: use case Q0, then Q1-Q3 weighted */
 
 const TIEBREAK_ORDER = [
   "confident_hallucination_enjoyer",

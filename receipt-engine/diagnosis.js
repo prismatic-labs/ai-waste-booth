@@ -1,4 +1,4 @@
-/* diagnosis.js — Diagnosis factory for both casual and builder paths */
+/* diagnosis.js - Diagnosis factory for both casual and builder paths */
 
 // Pattern lookup: (appType, concern) → PatternId
 const PATTERN_MAP = {
