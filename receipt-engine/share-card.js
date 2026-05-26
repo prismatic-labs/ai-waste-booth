@@ -103,7 +103,7 @@ const ShareCard = (() => {
     ctx.fillRect(0, 0, W, H);
 
     // ── Name (hero) - font sized to fit, barH derived from result ──
-    let fs = r(52); // r(52) ≈ 130px in a 1080px canvas - legible hero size
+    let fs = r(40);
     const longestWord = archName.split(" ").reduce((a, b) => a.length > b.length ? a : b);
     ctx.letterSpacing = "-1px";
     while (fs > r(26)) {
@@ -112,8 +112,8 @@ const ShareCard = (() => {
       fs -= 2;
     }
     const nameLines = _getWrappedLines(ctx, archName, maxW);
-    const nlh = Math.round(fs * 1.08);
-    const barH = r(32) + nameLines.length * nlh + r(20);
+    const nlh = Math.round(fs * 1.0);
+    const barH = r(24) + nameLines.length * nlh + r(16);
 
     ctx.fillStyle = "#f0e830";
     ctx.fillRect(0, 0, W, r(5)); // thin yellow accent line
@@ -122,7 +122,7 @@ const ShareCard = (() => {
     ctx.font = `900 ${fs}px Arial, sans-serif`;
     ctx.letterSpacing = "-1px";
     nameLines.forEach((line, i) => {
-      ctx.fillText(line, pad, r(32) + fs + i * nlh);
+      ctx.fillText(line, pad, r(24) + fs + i * nlh);
     });
 
     // ── Illustration - fills space between name and bottom reserve ──
