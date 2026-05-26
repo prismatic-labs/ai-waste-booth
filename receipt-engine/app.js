@@ -33,11 +33,17 @@ function showScreen(id) {
   window.scrollTo(0, 0);
 }
 
+// ── Analytics helper (no-op if GA not loaded) ─────────────────────────
+function _ga(event, params) {
+  if (typeof gtag === "function") gtag("event", event, params || {});
+}
+
 // ── Fork screen ────────────────────────────────────────────────────────
 document.querySelectorAll(".fork-tile").forEach(btn => {
   btn.addEventListener("click", () => {
     const fork = btn.dataset.fork;
     state.isBuilder = fork === "builder";
+    _ga("fork_selected", { fork });
     if (state.isBuilder) {
       showScreen("screen-builder");
       renderBuilderStep1();
@@ -101,6 +107,7 @@ function setBuilderProgress(step, total) {
 // ── Completion callbacks ───────────────────────────────────────────────
 function onCasualComplete(diagnosis) {
   state.diagnosis = diagnosis;
+  _ga("diagnosis_complete", { path: "casual", archetype: diagnosis.archetype });
   showScreen("screen-receipt");
   Receipt.render(diagnosis);
   _updateLinkedIn(diagnosis);
@@ -109,6 +116,7 @@ function onCasualComplete(diagnosis) {
 
 function onBuilderComplete(diagnosis) {
   state.diagnosis = diagnosis;
+  _ga("diagnosis_complete", { path: "builder", pattern: diagnosis.suspectedPattern, app_type: state.appType, concern: state.concern });
   showScreen("screen-receipt");
   Receipt.render(diagnosis);
   _updateLinkedIn(diagnosis);
@@ -116,8 +124,8 @@ function onBuilderComplete(diagnosis) {
 }
 
 // ── Share / Save buttons ──────────────────────────────────────────────
-document.getElementById("btn-share-card").addEventListener("click", () => ShareCard.share());
-document.getElementById("btn-save-card").addEventListener("click",  () => ShareCard.save());
+document.getElementById("btn-share-card").addEventListener("click", () => { _ga("share_clicked", { method: "card" }); ShareCard.share(); });
+document.getElementById("btn-save-card").addEventListener("click",  () => { _ga("share_clicked", { method: "save_image" }); ShareCard.save(); });
 
 function _updateLinkedIn(diagnosis) {
   const url = _getLinkedInResultUrl(diagnosis);
@@ -133,8 +141,9 @@ function _updateLinkedIn(diagnosis) {
 Find your AI waste archetype:
 ${url}`
   );
-  document.getElementById("btn-linkedin").href =
-    `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${text}`;
+  const liBtn = document.getElementById("btn-linkedin");
+  liBtn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${text}`;
+  liBtn.onclick = () => _ga("share_clicked", { method: "linkedin" });
 }
 
 function _getLinkedInResultUrl(diagnosis) {
