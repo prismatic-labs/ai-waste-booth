@@ -96,40 +96,38 @@ const ShareCard = (() => {
   function _drawCasualCard(ctx, d, canvas, img) {
     const archName = _getArchetypeName(d.archetype);
     const oneLiner = _getOneLiner(d.archetype);
-    const pad = r(52);
+    const pad = r(42);
     const maxW = W - pad * 2;
 
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0, 0, W, H);
 
-    // ── Name section (the hero) ──────────────────────────────────
-    let fs = r(88);
+    // ── Name (hero) — font sized to fit, barH derived from result ──
+    let fs = r(52); // r(52) ≈ 130px in a 1080px canvas — legible hero size
     const longestWord = archName.split(" ").reduce((a, b) => a.length > b.length ? a : b);
     ctx.letterSpacing = "-1px";
-    while (fs > r(36)) {
+    while (fs > r(26)) {
       ctx.font = `900 ${fs}px Arial, sans-serif`;
       if (ctx.measureText(longestWord).width <= maxW) break;
-      fs -= 4;
+      fs -= 2;
     }
     const nameLines = _getWrappedLines(ctx, archName, maxW);
-    const nlh = Math.round(fs * 1.05);
-    const nameTopPad = r(38);
-    const barH = nameTopPad + nameLines.length * nlh + r(28);
+    const nlh = Math.round(fs * 1.08);
+    const barH = r(32) + nameLines.length * nlh + r(20);
 
-    // thin yellow accent line
     ctx.fillStyle = "#f0e830";
-    ctx.fillRect(0, 0, W, r(5));
+    ctx.fillRect(0, 0, W, r(5)); // thin yellow accent line
 
-    // name — white, large, top section
     ctx.fillStyle = "#ffffff";
     ctx.font = `900 ${fs}px Arial, sans-serif`;
     ctx.letterSpacing = "-1px";
     nameLines.forEach((line, i) => {
-      ctx.fillText(line, pad, nameTopPad + fs + i * nlh);
+      ctx.fillText(line, pad, r(32) + fs + i * nlh);
     });
 
-    // ── Illustration ─────────────────────────────────────────────
-    const imgH = Math.round(H * 0.55);
+    // ── Illustration — fills space between name and bottom reserve ──
+    const bottomReserve = r(155); // enough for one-liner + branding
+    const imgH = Math.max(H - barH - bottomReserve, Math.round(H * 0.33));
     if (img) {
       ctx.save();
       const scale = Math.max(W / img.naturalWidth, imgH / img.naturalHeight);
@@ -150,34 +148,33 @@ const ShareCard = (() => {
 
     // ── One-liner ─────────────────────────────────────────────────
     ctx.fillStyle = "#cccccc";
-    ctx.font = `italic 400 ${r(27)}px Arial, sans-serif`;
+    ctx.font = `italic 400 ${r(22)}px Arial, sans-serif`;
     ctx.letterSpacing = "0px";
     const olLines = _getWrappedLines(ctx, `"${oneLiner}"`, maxW);
-    let ty = barH + imgH + r(42);
-    olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(36); });
+    let ty = barH + imgH + r(30);
+    olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(28); });
 
-    // ── Logo + URL + receipt label ────────────────────────────────
-    const urlY = ty + r(20);
+    // ── Logo + URL lockup ─────────────────────────────────────────
+    const urlY = ty + r(14);
     if (_logoImg && _logoImg.naturalWidth) {
-      const logoH2 = r(22);
+      const logoH2 = r(18);
       const logoW = Math.round(logoH2 * _logoImg.naturalWidth / _logoImg.naturalHeight);
       ctx.save();
       ctx.shadowColor = "rgba(0,0,0,0.8)"; ctx.shadowBlur = r(6);
       ctx.drawImage(_logoImg, pad, urlY - logoH2 + r(2), logoW, logoH2);
       ctx.restore();
       ctx.fillStyle = "#f0e830";
-      ctx.font = `500 ${r(17)}px 'Courier New', monospace`;
+      ctx.font = `500 ${r(14)}px 'Courier New', monospace`;
       ctx.letterSpacing = "0px";
-      ctx.fillText("prismaticlabs.ai", pad + logoW + r(10), urlY);
+      ctx.fillText("prismaticlabs.ai", pad + logoW + r(8), urlY);
     } else {
       ctx.fillStyle = "#f0e830";
-      ctx.font = `500 ${r(17)}px 'Courier New', monospace`;
+      ctx.font = `500 ${r(14)}px 'Courier New', monospace`;
       ctx.letterSpacing = "0px";
       ctx.fillText("prismaticlabs.ai", pad, urlY);
     }
-    // "AI WASTE RECEIPT" as flavour label, bottom-right, muted
     ctx.fillStyle = "#444";
-    ctx.font = `500 ${r(13)}px 'Courier New', monospace`;
+    ctx.font = `500 ${r(11)}px 'Courier New', monospace`;
     ctx.letterSpacing = "2px";
     const receiptLabel = "AI WASTE RECEIPT";
     const labelW = ctx.measureText(receiptLabel).width;
