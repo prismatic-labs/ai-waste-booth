@@ -154,22 +154,27 @@ const ShareCard = (() => {
     let ty = barH + imgH + r(30);
     olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(28); });
 
-    // ── Bottom: single lockup — logo icon + URL, matched optical size ──
+    // ── Bottom-right: logo icon + URL lockup ─────────────────────────
     const lockupY = ty + r(20);
     ctx.fillStyle = "#f0e830";
     ctx.font = `500 ${r(14)}px 'Courier New', monospace`;
     ctx.letterSpacing = "0px";
-    const textH = r(14); // cap-height approximation
+    const textH = r(14);
+    const urlText = "prismaticlabs.ai";
+    const urlW = ctx.measureText(urlText).width;
     if (_logoImg && _logoImg.naturalWidth) {
       const logoH2 = textH;
       const logoW = Math.round(logoH2 * _logoImg.naturalWidth / _logoImg.naturalHeight);
+      const startX = W - pad - logoW - r(6) - urlW;
       ctx.save();
       ctx.shadowColor = "rgba(0,0,0,0.6)"; ctx.shadowBlur = r(4);
-      ctx.drawImage(_logoImg, pad, lockupY - logoH2, logoW, logoH2);
+      ctx.drawImage(_logoImg, startX, lockupY - logoH2, logoW, logoH2);
       ctx.restore();
-      ctx.fillText("prismaticlabs.ai", pad + logoW + r(6), lockupY);
+      ctx.fillText(urlText, startX + logoW + r(6), lockupY);
     } else {
-      ctx.fillText("prismaticlabs.ai", pad, lockupY);
+      ctx.textAlign = "right";
+      ctx.fillText(urlText, W - pad, lockupY);
+      ctx.textAlign = "left";
     }
 
     _store(canvas, `ai-waste-archetype-${d.archetype}.png`);
@@ -403,7 +408,7 @@ const ShareCard = (() => {
   function _getShareText(diagnosis) {
     if (!diagnosis) return "Find your AI waste archetype.";
     if (diagnosis.isBuilder) return "Is your AI system failing silently?";
-    return "Find your AI waste archetype.";
+    return "A playful quiz for spotting the AI habits that quietly waste time, context, and compute.";
   }
 
   function _slug(value) {

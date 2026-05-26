@@ -110,8 +110,8 @@ const PATTERNS_DATA = [
   {
     "id": "STALL-001",
     "name": "Stalled Agent Loop",
-    "risk": "Repeated LLM calls with no measurable progress - tokens spent, output stalled.",
-    "secondaryRisk": "Users hit the failure before your team sees it - the agent is spinning while the user waits for a response that never arrives.",
+    "risk": "Repeated LLM calls with no measurable progress — tokens spent, output stalled.",
+    "secondaryRisk": "Users hit the failure before your team sees it — the agent is spinning while the user waits for a response that never arrives.",
     "whatToCheck": [
       "Are you tracking per-call progress, not just whether the loop terminates?",
       "Is there a maximum-step guardrail before graceful failure?",
@@ -121,8 +121,8 @@ const PATTERNS_DATA = [
   {
     "id": "CACHE-001",
     "name": "Repeated Input Burn",
-    "risk": "Identical or near-identical prompts re-paid on every call - prompt caching not in use.",
-    "secondaryRisk": "Users hit the failure before your team sees it - latency and costs climb invisibly as usage scales, before anyone notices the bill.",
+    "risk": "Identical or near-identical prompts re-paid on every call — prompt caching not in use.",
+    "secondaryRisk": "Users hit the failure before your team sees it — latency and costs climb invisibly as usage scales, before anyone notices the bill.",
     "whatToCheck": [
       "Are you using prompt caching for static system prompts and shared context?",
       "Are your cache keys stable, or does small variation invalidate the cache each time?",
@@ -132,8 +132,8 @@ const PATTERNS_DATA = [
   {
     "id": "RAG-001",
     "name": "RAG Bloat",
-    "risk": "High input-to-output token ratio - retrieval pulling too much, relevance ranking too loose.",
-    "secondaryRisk": "Users hit the failure before your team sees it - answers degrade as the knowledge base grows, and the signal gets buried in retrieved noise.",
+    "risk": "High input-to-output token ratio — retrieval pulling too much, relevance ranking too loose.",
+    "secondaryRisk": "Users hit the failure before your team sees it — answers degrade as the knowledge base grows, and the signal gets buried in retrieved noise.",
     "whatToCheck": [
       "What is your average retrieved-chunk count per query, and have you measured answer quality vs chunk count?",
       "Is your similarity threshold tuned on real user queries, or left at default?",
@@ -143,8 +143,8 @@ const PATTERNS_DATA = [
   {
     "id": "BABBLE-001",
     "name": "Excessive Generation",
-    "risk": "Unusually long, unconstrained outputs - no max_tokens or response-length guidance in prompts.",
-    "secondaryRisk": "Users hit the failure before your team sees it - responses feel slow and verbose, and users stop reading before the useful part.",
+    "risk": "Unusually long, unconstrained outputs — no max_tokens or response-length guidance in prompts.",
+    "secondaryRisk": "Users hit the failure before your team sees it — responses feel slow and verbose, and users stop reading before the useful part.",
     "whatToCheck": [
       "Are you setting max_tokens or an explicit length instruction in your prompts?",
       "Are your prompts asking for structured output (lists, JSON) rather than open-ended prose?",
@@ -154,8 +154,8 @@ const PATTERNS_DATA = [
   {
     "id": "ZOMBIE-001",
     "name": "Post-Completion Drift",
-    "risk": "LLM calls continuing after the task is done - no completion signal, loop overshoots.",
-    "secondaryRisk": "Users hit the failure before your team sees it - the user got their answer three steps ago; your system is still burning tokens on cleanup no one asked for.",
+    "risk": "LLM calls continuing after the task is done — no completion signal, loop overshoots.",
+    "secondaryRisk": "Users hit the failure before your team sees it — the user got their answer three steps ago; your system is still burning tokens on cleanup no one asked for.",
     "whatToCheck": [
       "Is there an explicit done-signal in your agent loop, or does it always run to max steps?",
       "Are post-task calls (summaries, logs, cleanup) gated on whether the task actually completed?",
@@ -165,8 +165,8 @@ const PATTERNS_DATA = [
   {
     "id": "CTX-001",
     "name": "Context Snowball",
-    "risk": "Context window grows across turns while output quality stalls - compounding noise, no pruning.",
-    "secondaryRisk": "Users hit the failure before your team sees it - conversation quality degrades mid-session as old, irrelevant turns crowd out useful context.",
+    "risk": "Context window grows across turns while output quality stalls — compounding noise, no pruning.",
+    "secondaryRisk": "Users hit the failure before your team sees it — conversation quality degrades mid-session as old, irrelevant turns crowd out useful context.",
     "whatToCheck": [
       "Are you pruning or summarising older turns before they fill the context window?",
       "Have you measured whether later turns in a long conversation are actually better or worse?",
@@ -176,8 +176,8 @@ const PATTERNS_DATA = [
   {
     "id": "EMPTY-001",
     "name": "Invisible Output Burn",
-    "risk": "Tokens spent on generation with little visible answer - model producing hedging, refusals, or padding instead of content.",
-    "secondaryRisk": "Users hit the failure before your team sees it - users get plausible-looking non-answers and assume the product doesn't work, not that the model is hedging.",
+    "risk": "Tokens spent on generation with little visible answer — model producing hedging, refusals, or padding instead of content.",
+    "secondaryRisk": "Users hit the failure before your team sees it — users get plausible-looking non-answers and assume the product doesn't work, not that the model is hedging.",
     "whatToCheck": [
       "What fraction of your responses contain a substantive answer vs a hedge, disclaimer, or refusal?",
       "Are your prompts granting the model the context it needs to give a direct answer?",
@@ -190,7 +190,7 @@ const QUIZ_DATA = {
   "questions": [
     {
       "id": "q1",
-      "text": "The answer is <em>almost</em> right. What's your next move?",
+      "text": "When the AI answer is nearly useful, what do you do next?",
       "answers": [
         {
           "id": "q1a",
