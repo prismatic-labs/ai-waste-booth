@@ -105,6 +105,7 @@ const Receipt = (() => {
 
     if (d.isBuilder) {
       container.innerHTML = `
+        <p class="cta-section-label">Next step</p>
         <a href="${_esc(vetchScanUrl)}" class="btn-primary builder-cta"
            target="_blank" rel="noopener"
            onclick="if(typeof gtag==='function')gtag('event','cta_clicked',{cta:'vetch_scan'})">Run a free Vetch scan</a>
@@ -113,10 +114,11 @@ const Receipt = (() => {
            onclick="if(typeof gtag==='function')gtag('event','cta_clicked',{cta:'vetch_review'})">Book a Vetch review - from £295</a>`;
     } else {
       container.innerHTML = `
+        <p class="cta-section-label">Want to fix it?</p>
         <a href="${_esc(upgradeUrl)}" class="btn-primary"
            target="_blank" rel="noopener"
-           onclick="if(typeof gtag==='function')gtag('event','cta_clicked',{cta:'upgrade_15'})">Fix one AI workflow - £15</a>
-        <p class="cta-supporting-line">Send us one task you repeat with AI. We return a tested prompt template and a short guide: what it does, how to adapt it, what to watch for. Delivered in 5 working days.</p>`;
+           onclick="if(typeof gtag==='function')gtag('event','cta_clicked',{cta:'upgrade_15'})">Upgrade one AI workflow - £15</a>
+        <p class="cta-supporting-line">Send us one task you repeat with AI. We return a prompt that works — plus a short guide to what your archetype is leaving on the table. Delivered in 5 working days.</p>`;
     }
   }
 
