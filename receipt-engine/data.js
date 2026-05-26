@@ -4,7 +4,7 @@ const ARCHETYPES_DATA = [
   {
     "id": "regeneration_goblin",
     "name": "Regeneration Goblin",
-    "oneLiner": "Keeps giving the idea one more chance, because the next version really might land.",
+    "oneLiner": "Has turned 'just one more prompt' into a productivity strategy.",
     "symptoms": [
       "Your chat has become a small saga - and you can feel the answer getting closer",
       "You've tried one more wording, then one more after that, with genuine optimism",
@@ -21,7 +21,7 @@ const ARCHETYPES_DATA = [
   {
     "id": "context_hoarder",
     "name": "Context Hoarder",
-    "oneLiner": "Brings the full picture, because missing context feels worse than too much context.",
+    "oneLiner": "Has never met a background detail that wasn't potentially load-bearing.",
     "symptoms": [
       "Your prompts sometimes look like they packed for a long weekend",
       "You've pasted an entire doc 'just in case one detail matters'",
@@ -37,8 +37,8 @@ const ARCHETYPES_DATA = [
   },
   {
     "id": "confident_hallucination_enjoyer",
-    "name": "Confident Answer Collector",
-    "oneLiner": "Spots a polished answer quickly, then gives it the source-check it deserves.",
+    "name": "Confident Hallucination Enjoyer",
+    "oneLiner": "The AI said it with such confidence. That must count for something.",
     "symptoms": [
       "You've nearly used an AI stat before checking where it came from",
       "Polished wording can feel reassuring before the sources have caught up",
@@ -55,7 +55,7 @@ const ARCHETYPES_DATA = [
   {
     "id": "prompt_archaeologist",
     "name": "Prompt Archaeologist",
-    "oneLiner": "Knows past experiments contain treasure, and goes looking for the useful bits.",
+    "oneLiner": "Has a prompts folder. Cannot find the good ones.",
     "symptoms": [
       "You have a prompts folder that is more museum than system",
       "You've said 'there was a version of this that worked...' and gone digging",
@@ -72,7 +72,7 @@ const ARCHETYPES_DATA = [
   {
     "id": "copy_paste_pilot",
     "name": "Copy-Paste Pilot",
-    "oneLiner": "First to have a draft, last to read it twice.",
+    "oneLiner": "Ships fast. The [RECIPIENT NAME] ships with it.",
     "symptoms": [
       "You've sent something that looked fine, then spotted the placeholder two minutes later",
       "You trust your eye to catch what matters on a quick read-through - and mostly it does",
@@ -90,7 +90,7 @@ const ARCHETYPES_DATA = [
   {
     "id": "improviser",
     "name": "The Improviser",
-    "oneLiner": "Starts every AI task with jazz hands and a blank prompt box.",
+    "oneLiner": "Figures it out as they go. Has been figuring it out for a while.",
     "symptoms": [
       "Every session starts fresh - you like to follow the task as it unfolds",
       "You've definitely solved the same thing from scratch at least twice",
