@@ -102,17 +102,34 @@ const ShareCard = (() => {
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0, 0, W, H);
 
-    // solid yellow header bar — eyebrow lives here, no image bleed
-    const barH = r(76);
-    ctx.fillStyle = "#f0e830";
-    ctx.fillRect(0, 0, W, barH);
-    ctx.font = `700 ${r(20)}px 'Courier New', monospace`;
-    ctx.letterSpacing = "3px";
-    ctx.fillStyle = "#0a0a0a";
-    ctx.fillText("AI WASTE RECEIPT", pad, r(50));
+    // ── Name section (the hero) ──────────────────────────────────
+    let fs = r(88);
+    const longestWord = archName.split(" ").reduce((a, b) => a.length > b.length ? a : b);
+    ctx.letterSpacing = "-1px";
+    while (fs > r(36)) {
+      ctx.font = `900 ${fs}px Arial, sans-serif`;
+      if (ctx.measureText(longestWord).width <= maxW) break;
+      fs -= 4;
+    }
+    const nameLines = _getWrappedLines(ctx, archName, maxW);
+    const nlh = Math.round(fs * 1.05);
+    const nameTopPad = r(38);
+    const barH = nameTopPad + nameLines.length * nlh + r(28);
 
-    // illustration below the bar
-    const imgH = Math.round(H * 0.57);
+    // thin yellow accent line
+    ctx.fillStyle = "#f0e830";
+    ctx.fillRect(0, 0, W, r(5));
+
+    // name — white, large, top section
+    ctx.fillStyle = "#ffffff";
+    ctx.font = `900 ${fs}px Arial, sans-serif`;
+    ctx.letterSpacing = "-1px";
+    nameLines.forEach((line, i) => {
+      ctx.fillText(line, pad, nameTopPad + fs + i * nlh);
+    });
+
+    // ── Illustration ─────────────────────────────────────────────
+    const imgH = Math.round(H * 0.55);
     if (img) {
       ctx.save();
       const scale = Math.max(W / img.naturalWidth, imgH / img.naturalHeight);
@@ -125,44 +142,22 @@ const ShareCard = (() => {
       grad.addColorStop(0, "#1a1a2e"); grad.addColorStop(1, "#0a0a0a");
       ctx.fillStyle = grad; ctx.fillRect(0, barH, W, imgH);
     }
-
-    const fadeGrad = ctx.createLinearGradient(0, barH + imgH * 0.25, 0, barH + imgH);
-    fadeGrad.addColorStop(0,   "rgba(0,0,0,0)");
-    fadeGrad.addColorStop(0.6, "rgba(0,0,0,0.82)");
-    fadeGrad.addColorStop(1,   "rgba(0,0,0,0.97)");
+    const fadeGrad = ctx.createLinearGradient(0, barH + imgH * 0.45, 0, barH + imgH);
+    fadeGrad.addColorStop(0, "rgba(0,0,0,0)");
+    fadeGrad.addColorStop(1, "rgba(0,0,0,0.96)");
     ctx.fillStyle = fadeGrad;
     ctx.fillRect(0, barH, W, imgH);
 
-    // archetype name — auto-sized so the longest word always fits, bottom-anchored
-    let fs = r(70);
-    const longestWord = archName.split(" ").reduce((a, b) => a.length > b.length ? a : b);
-    ctx.letterSpacing = "-1px";
-    while (fs > r(28)) {
-      ctx.font = `800 ${fs}px Arial, sans-serif`;
-      if (ctx.measureText(longestWord).width <= maxW) break;
-      fs -= 4;
-    }
-    const nameLines = _getWrappedLines(ctx, archName, maxW);
-    const nlh = Math.round(fs * 1.1);
-    const nameBottom = barH + imgH - r(22);
-    ctx.save();
-    ctx.fillStyle = "#ffffff";
-    ctx.shadowColor = "rgba(0,0,0,0.92)"; ctx.shadowBlur = r(6); ctx.shadowOffsetY = r(2);
-    nameLines.forEach((line, i) => {
-      ctx.fillText(line, pad, nameBottom - (nameLines.length - 1 - i) * nlh);
-    });
-    ctx.restore();
-
-    // one-liner — flows downward from below image
+    // ── One-liner ─────────────────────────────────────────────────
     ctx.fillStyle = "#cccccc";
-    ctx.font = `italic 400 ${r(28)}px Arial, sans-serif`;
+    ctx.font = `italic 400 ${r(27)}px Arial, sans-serif`;
     ctx.letterSpacing = "0px";
     const olLines = _getWrappedLines(ctx, `"${oneLiner}"`, maxW);
-    let ty = barH + imgH + r(46);
-    olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(37); });
+    let ty = barH + imgH + r(42);
+    olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(36); });
 
-    // logo + URL lockup — bottom left, logo inline then text
-    const urlY = ty + r(22);
+    // ── Logo + URL + receipt label ────────────────────────────────
+    const urlY = ty + r(20);
     if (_logoImg && _logoImg.naturalWidth) {
       const logoH2 = r(22);
       const logoW = Math.round(logoH2 * _logoImg.naturalWidth / _logoImg.naturalHeight);
@@ -171,15 +166,22 @@ const ShareCard = (() => {
       ctx.drawImage(_logoImg, pad, urlY - logoH2 + r(2), logoW, logoH2);
       ctx.restore();
       ctx.fillStyle = "#f0e830";
-      ctx.font = `500 ${r(18)}px 'Courier New', monospace`;
+      ctx.font = `500 ${r(17)}px 'Courier New', monospace`;
       ctx.letterSpacing = "0px";
       ctx.fillText("prismaticlabs.ai", pad + logoW + r(10), urlY);
     } else {
       ctx.fillStyle = "#f0e830";
-      ctx.font = `500 ${r(18)}px 'Courier New', monospace`;
+      ctx.font = `500 ${r(17)}px 'Courier New', monospace`;
       ctx.letterSpacing = "0px";
       ctx.fillText("prismaticlabs.ai", pad, urlY);
     }
+    // "AI WASTE RECEIPT" as flavour label, bottom-right, muted
+    ctx.fillStyle = "#444";
+    ctx.font = `500 ${r(13)}px 'Courier New', monospace`;
+    ctx.letterSpacing = "2px";
+    const receiptLabel = "AI WASTE RECEIPT";
+    const labelW = ctx.measureText(receiptLabel).width;
+    ctx.fillText(receiptLabel, W - pad - labelW, urlY);
 
     _store(canvas, `ai-waste-archetype-${d.archetype}.png`);
   }

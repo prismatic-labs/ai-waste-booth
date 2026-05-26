@@ -8,6 +8,7 @@ const Receipt = (() => {
     ShareCard.prepare(diagnosis);
     _renderPersonalReceipt(diagnosis);
     _renderCTASection(diagnosis);
+    _renderViralNudge(diagnosis);
 
     const shareBtn = document.getElementById("btn-share-card");
     if (shareBtn) {
@@ -222,6 +223,15 @@ const Receipt = (() => {
     label.textContent = ctaText;
     containerEl.appendChild(wrap);
     containerEl.appendChild(label);
+  }
+
+  // ── Viral nudge ───────────────────────────────────────────────────
+  function _renderViralNudge(d) {
+    const el = document.getElementById("receipt-viral-nudge");
+    if (!el) return;
+    if (d.isBuilder) { el.textContent = ""; return; }
+    const archName = _getArchetypeName(d.archetype);
+    el.textContent = `Know someone who is definitely a ${archName}? Send them this.`;
   }
 
   // ── Helpers ────────────────────────────────────────────────────────
