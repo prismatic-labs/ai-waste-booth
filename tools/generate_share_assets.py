@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 from pathlib import Path
@@ -146,17 +147,21 @@ def home_card() -> Image.Image:
     draw.rectangle((0, 0, CARD_W, 12), fill="#f0e830")
     draw.text((64, 82), "PRISMATIC LABS", font=FONTS["mono_bold"], fill="#888888")
     draw_wrapped(draw, "AI Waste Receipt", (64, 170), FONTS["hero"], "#f0e830", 900, 92, 2)
-    draw_wrapped(draw, "Find out your AI waste pattern - or spot silent inference waste in your AI system.", (64, 360), FONTS["body"], "#e8e8e8", 920, 44, 3)
+    draw_wrapped(draw, "Find your AI waste archetype - or spot silent inference waste in your AI system.", (64, 360), FONTS["body"], "#e8e8e8", 920, 44, 3)
     draw.text((64, CARD_H - 64), "prismatic-labs.github.io/ai-waste-booth", font=FONTS["mono_small"], fill="#f0e830")
     return card
 
 
-def share_page(item: dict, kind: str, page_slug: str) -> str:
+def asset_version(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:12]
+
+
+def share_page(item: dict, kind: str, page_slug: str, image_version: str) -> str:
     if kind == "casual":
         og_title = f"I got {item['name']}"
         desc = item["oneLiner"]
         eyebrow = "AI WASTE RECEIPT"
-        cta = "Get your own receipt"
+        cta = "Find your archetype"
         intro = "Find out which AI waste archetype is yours."
         accent = "#f0e830"
     else:
@@ -168,7 +173,7 @@ def share_page(item: dict, kind: str, page_slug: str) -> str:
         accent = "#30f0c0"
 
     url = f"{BASE_URL}/share/{page_slug}/"
-    image = f"{BASE_URL}/share/cards/{page_slug}.png"
+    image = f"{BASE_URL}/share/cards/{page_slug}.png?v={image_version}"
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -230,13 +235,15 @@ def main() -> None:
 
     for archetype in archetypes:
         page_slug = slug(archetype["id"])
-        casual_card(archetype).save(cards_dir / f"{page_slug}.png")
-        write(ROOT / "share" / page_slug / "index.html", share_page(archetype, "casual", page_slug))
+        card_path = cards_dir / f"{page_slug}.png"
+        casual_card(archetype).save(card_path)
+        write(ROOT / "share" / page_slug / "index.html", share_page(archetype, "casual", page_slug, asset_version(card_path)))
 
     for pattern in patterns:
         page_slug = slug(pattern["id"])
-        builder_card(pattern).save(cards_dir / f"{page_slug}.png")
-        write(ROOT / "share" / page_slug / "index.html", share_page(pattern, "builder", page_slug))
+        card_path = cards_dir / f"{page_slug}.png"
+        builder_card(pattern).save(card_path)
+        write(ROOT / "share" / page_slug / "index.html", share_page(pattern, "builder", page_slug, asset_version(card_path)))
 
 
 if __name__ == "__main__":

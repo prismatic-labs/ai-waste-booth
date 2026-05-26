@@ -120,21 +120,28 @@ document.getElementById("btn-share-card").addEventListener("click", () => ShareC
 document.getElementById("btn-save-card").addEventListener("click",  () => ShareCard.save());
 
 function _updateLinkedIn(diagnosis) {
-  const url = ShareCard.getShareUrl(diagnosis);
+  const url = _getLinkedInResultUrl(diagnosis);
   const name = diagnosis.isBuilder
     ? (diagnosis.suspectedPattern || "a silent failure")
     : (ARCHETYPES_DATA.find(a => a.id === diagnosis.archetype)?.name || "");
   const opener = diagnosis.isBuilder
     ? `I just got a suspected "${name}" signal from the AI Waste Receipt booth by Prismatic Labs.`
-    : `My AI Waste Receipt says I'm "${name}" at the booth by Prismatic Labs.`;
+    : `My AI waste archetype is "${name}" at the booth by Prismatic Labs.`;
   const text = encodeURIComponent(
     `${opener}
 
-Find out your AI waste pattern:
+Find your AI waste archetype:
 ${url}`
   );
   document.getElementById("btn-linkedin").href =
-    `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
+    `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}&summary=${text}`;
+}
+
+function _getLinkedInResultUrl(diagnosis) {
+  const url = new URL(ShareCard.getShareUrl(diagnosis));
+  const key = diagnosis.isBuilder ? diagnosis.suspectedPattern : diagnosis.archetype;
+  if (key) url.searchParams.set(diagnosis.isBuilder ? "pattern" : "archetype", key);
+  return url.toString();
 }
 
 // ── Restart ───────────────────────────────────────────────────────────

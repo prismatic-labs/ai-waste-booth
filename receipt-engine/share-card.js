@@ -9,6 +9,7 @@ const ShareCard = (() => {
   let _shareUrl = null;
   let _shareTitle = null;
   let _shareText = null;
+  let _isBuilderShare = false;
 
   // pre-load logo so it's ready by the time prepare() is called
   let _logoImg = null;
@@ -25,6 +26,7 @@ const ShareCard = (() => {
     _shareUrl = _getShareUrl(diagnosis);
     _shareTitle = _getShareTitle(diagnosis);
     _shareText = _getShareText(diagnosis);
+    _isBuilderShare = !!diagnosis.isBuilder;
     // restore save button visibility in case it was hidden on a previous run
     const saveBtn = document.getElementById("btn-save-card");
     if (saveBtn) saveBtn.style.display = "";
@@ -49,14 +51,28 @@ const ShareCard = (() => {
     _drawCasualCard(canvas.getContext("2d"), diagnosis, canvas, img);
   }
 
-  // ── Share the public result URL so social platforms can scrape OG art ──
+  // ── Prefer native image sharing; fall back to the public URL for OG scrapers ──
   function share() {
     if (!_shareUrl) { _fallbackMsg(); return; }
 
+    const file = _getShareFile();
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        files: [file],
+        title: _shareTitle || "AI Waste Archetype",
+        text: _shareText || "My AI waste archetype.",
+      }).catch(() => _shareLink());
+      return;
+    }
+
+    _shareLink();
+  }
+
+  function _shareLink() {
     if (navigator.share) {
       navigator.share({
-        title: _shareTitle || "AI Waste Receipt",
-        text: _shareText || "Find out your AI waste pattern.",
+        title: _shareTitle || "AI Waste Archetype",
+        text: _shareText || "Find your AI waste archetype.",
         url: _shareUrl,
       }).catch(() => _copyShareLink());
       return;
@@ -69,6 +85,11 @@ const ShareCard = (() => {
     if (!_readyBlob) { _fallbackMsg(); return; }
     _downloadBlob(_readyBlob, _readyFilename);
     _showDownloadNudge();
+  }
+
+  function _getShareFile() {
+    if (!_readyBlob || !_readyFilename || typeof File === "undefined") return null;
+    return new File([_readyBlob], _readyFilename, { type: "image/png" });
   }
 
   // ── Casual share card ─────────────────────────────────────────────
@@ -159,7 +180,7 @@ const ShareCard = (() => {
       ctx.drawImage(_logoImg, bx + px, by + py, logoW, logoH2);
     }
 
-    _store(canvas, `ai-waste-receipt-${d.archetype}.png`);
+    _store(canvas, `ai-waste-archetype-${d.archetype}.png`);
   }
 
   // ── Builder share card ─────────────────────────────────────────────
@@ -241,7 +262,9 @@ const ShareCard = (() => {
     const saveBtn  = document.getElementById("btn-save-card");
     if (!shareBtn || !saveBtn) return;
 
-    shareBtn.textContent = navigator.share ? "Share result" : "Copy result link";
+    shareBtn.textContent = navigator.share
+      ? (_isBuilderShare ? "Share report" : "Share archetype")
+      : (_isBuilderShare ? "Copy report link" : "Copy archetype link");
     saveBtn.textContent  = "Save image";
     saveBtn.style.display = "";
   }
@@ -320,7 +343,7 @@ const ShareCard = (() => {
     const btn = document.getElementById("btn-share-card");
     if (!btn) return;
     const orig = btn.textContent;
-    btn.textContent = "Result link copied";
+    btn.textContent = _isBuilderShare ? "Report link copied" : "Archetype link copied";
     setTimeout(() => { btn.textContent = orig; }, 3500);
   }
 
@@ -380,15 +403,15 @@ const ShareCard = (() => {
   }
 
   function _getShareTitle(diagnosis) {
-    if (!diagnosis) return "AI Waste Receipt";
+    if (!diagnosis) return "AI Waste Archetype";
     if (diagnosis.isBuilder) return `Silent Failure: ${_getPatternName(diagnosis.suspectedPattern)}`;
     return `I got ${_getArchetypeName(diagnosis.archetype)}`;
   }
 
   function _getShareText(diagnosis) {
-    if (!diagnosis) return "Find out your AI waste pattern.";
+    if (!diagnosis) return "Find your AI waste archetype.";
     if (diagnosis.isBuilder) return "Is your AI system failing silently?";
-    return "Find out your AI waste pattern.";
+    return "Find your AI waste archetype.";
   }
 
   function _slug(value) {

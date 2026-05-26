@@ -11,7 +11,7 @@ const Receipt = (() => {
 
     const shareBtn = document.getElementById("btn-share-card");
     if (shareBtn) {
-      shareBtn.textContent = "Share result";
+      shareBtn.textContent = diagnosis.isBuilder ? "Share report" : "Share archetype";
       shareBtn.classList.toggle("builder-cta", diagnosis.isBuilder);
     }
   }
