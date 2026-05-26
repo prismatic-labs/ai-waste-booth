@@ -1,6 +1,6 @@
 /* Service worker - caches the full app on first load for offline use */
 
-const CACHE = "ai-waste-booth-v2";
+const CACHE = "ai-waste-booth-v3";
 
 const PRECACHE = [
   "./index.html",
