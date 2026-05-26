@@ -102,35 +102,36 @@ const ShareCard = (() => {
     ctx.fillStyle = "#0a0a0a";
     ctx.fillRect(0, 0, W, H);
 
-    const imgH = Math.round(H * 0.62);
+    // solid yellow header bar — eyebrow lives here, no image bleed
+    const barH = r(76);
+    ctx.fillStyle = "#f0e830";
+    ctx.fillRect(0, 0, W, barH);
+    ctx.font = `700 ${r(20)}px 'Courier New', monospace`;
+    ctx.letterSpacing = "3px";
+    ctx.fillStyle = "#0a0a0a";
+    ctx.fillText("AI WASTE RECEIPT", pad, r(50));
 
+    // illustration below the bar
+    const imgH = Math.round(H * 0.57);
     if (img) {
       ctx.save();
       const scale = Math.max(W / img.naturalWidth, imgH / img.naturalHeight);
       const sw = W / scale, sh = imgH / scale;
       const sx = (img.naturalWidth - sw) / 2, sy = (img.naturalHeight - sh) / 2;
-      ctx.drawImage(img, sx, sy, sw, sh, 0, 0, W, imgH);
+      ctx.drawImage(img, sx, sy, sw, sh, 0, barH, W, imgH);
       ctx.restore();
     } else {
-      const grad = ctx.createLinearGradient(0, 0, W, imgH);
+      const grad = ctx.createLinearGradient(0, barH, W, barH + imgH);
       grad.addColorStop(0, "#1a1a2e"); grad.addColorStop(1, "#0a0a0a");
-      ctx.fillStyle = grad; ctx.fillRect(0, 0, W, imgH);
+      ctx.fillStyle = grad; ctx.fillRect(0, barH, W, imgH);
     }
 
-    const fadeGrad = ctx.createLinearGradient(0, imgH * 0.25, 0, imgH);
+    const fadeGrad = ctx.createLinearGradient(0, barH + imgH * 0.25, 0, barH + imgH);
     fadeGrad.addColorStop(0,   "rgba(0,0,0,0)");
     fadeGrad.addColorStop(0.6, "rgba(0,0,0,0.82)");
     fadeGrad.addColorStop(1,   "rgba(0,0,0,0.97)");
     ctx.fillStyle = fadeGrad;
-    ctx.fillRect(0, 0, W, imgH);
-
-    // yellow top bar + eyebrow
-    ctx.fillStyle = "#f0e830";
-    ctx.fillRect(0, 0, W, 10);
-    ctx.font = `600 ${r(20)}px 'Courier New', monospace`;
-    ctx.letterSpacing = "3px";
-    ctx.fillStyle = "#f0e830";
-    ctx.fillText("AI WASTE RECEIPT", pad, r(56));
+    ctx.fillRect(0, barH, W, imgH);
 
     // archetype name — auto-sized so the longest word always fits, bottom-anchored
     let fs = r(70);
@@ -143,7 +144,7 @@ const ShareCard = (() => {
     }
     const nameLines = _getWrappedLines(ctx, archName, maxW);
     const nlh = Math.round(fs * 1.1);
-    const nameBottom = imgH - r(22);
+    const nameBottom = barH + imgH - r(22);
     ctx.save();
     ctx.fillStyle = "#ffffff";
     ctx.shadowColor = "rgba(0,0,0,0.92)"; ctx.shadowBlur = r(6); ctx.shadowOffsetY = r(2);
@@ -157,27 +158,27 @@ const ShareCard = (() => {
     ctx.font = `italic 400 ${r(28)}px Arial, sans-serif`;
     ctx.letterSpacing = "0px";
     const olLines = _getWrappedLines(ctx, `"${oneLiner}"`, maxW);
-    let ty = imgH + r(46);
+    let ty = barH + imgH + r(46);
     olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(37); });
 
-    // URL — short form, won't clip
-    ctx.fillStyle = "#f0e830";
-    ctx.font = `500 ${r(18)}px 'Courier New', monospace`;
-    ctx.letterSpacing = "0px";
-    ctx.fillText("prismaticlabs.ai", pad, ty + r(22));
-
-    // logo — bottom-right so it never collides with left-aligned text
+    // logo + URL lockup — bottom left, logo inline then text
+    const urlY = ty + r(22);
     if (_logoImg && _logoImg.naturalWidth) {
-      const logoW = r(80);
-      const logoH2 = Math.round(logoW * _logoImg.naturalHeight / _logoImg.naturalWidth);
-      const px = r(10), py = r(8);
-      const bw = logoW + px * 2, bh = logoH2 + py * 2;
-      const bx = W - pad - bw;
-      const by = H - r(28) - bh;
-      ctx.fillStyle = "#ffffff";
-      _roundRect(ctx, bx, by, bw, bh, r(7));
-      ctx.fill();
-      ctx.drawImage(_logoImg, bx + px, by + py, logoW, logoH2);
+      const logoH2 = r(22);
+      const logoW = Math.round(logoH2 * _logoImg.naturalWidth / _logoImg.naturalHeight);
+      ctx.save();
+      ctx.shadowColor = "rgba(0,0,0,0.8)"; ctx.shadowBlur = r(6);
+      ctx.drawImage(_logoImg, pad, urlY - logoH2 + r(2), logoW, logoH2);
+      ctx.restore();
+      ctx.fillStyle = "#f0e830";
+      ctx.font = `500 ${r(18)}px 'Courier New', monospace`;
+      ctx.letterSpacing = "0px";
+      ctx.fillText("prismaticlabs.ai", pad + logoW + r(10), urlY);
+    } else {
+      ctx.fillStyle = "#f0e830";
+      ctx.font = `500 ${r(18)}px 'Courier New', monospace`;
+      ctx.letterSpacing = "0px";
+      ctx.fillText("prismaticlabs.ai", pad, urlY);
     }
 
     _store(canvas, `ai-waste-archetype-${d.archetype}.png`);

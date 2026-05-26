@@ -190,7 +190,7 @@ const QUIZ_DATA = {
   "questions": [
     {
       "id": "q1",
-      "text": "When the AI answer is nearly useful, what do you do next?",
+      "text": "The answer is <em>almost</em> right. What's your next move?",
       "answers": [
         {
           "id": "q1a",

@@ -101,7 +101,7 @@ const Quiz = (() => {
     _setProgress(qIndex + 1, 4);
     const c = document.getElementById("quiz-container");
     c.innerHTML = `
-      <p class="quiz-question-text">${_escHtml(question.text)}</p>
+      <p class="quiz-question-text">${question.text}</p>
       <div class="quiz-answers" id="quiz-answers-wrap"></div>
     `;
     const wrap = document.getElementById("quiz-answers-wrap");
