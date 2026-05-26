@@ -177,8 +177,6 @@ const Receipt = (() => {
     push(`<span class="receipt-label">WHAT TO CHECK</span>`);
     d.whatToCheck.forEach(w => push(`<span>• ${_esc(w)}</span>`));
     push(`<br><span class="receipt-rule" style="color:#1e3a3a;">─────────────────────────────</span>`);
-    push(`<span style="font-size:11px;font-weight:bold;letter-spacing:1px;color:#4a9a9a;">RUN A FREE VETCH SCAN</span>`);
-    push(`<div id="receipt-qr-builder" class="receipt-qr"></div>`);
     push(`<span class="receipt-rule" style="color:#1e3a3a;">─────────────────────────────</span>`);
     push(`<a href="https://prismaticlabs.ai" target="_blank" rel="noopener" style="font-size:10px;color:#4a6a6a;text-decoration:none;">Prismatic Labs · prismaticlabs.ai</a>`);
     push(`<span class="receipt-rule" style="color:#1e3a3a;">━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>`);
