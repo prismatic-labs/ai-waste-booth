@@ -154,28 +154,23 @@ const ShareCard = (() => {
     let ty = barH + imgH + r(30);
     olLines.forEach(line => { ctx.fillText(line, pad, ty); ty += r(28); });
 
-    // ── Bottom-right: logo icon + URL lockup ─────────────────────────
+    // ── Bottom: logo left, URL right ─────────────────────────────────
     const lockupY = ty + r(20);
     ctx.fillStyle = "#f0e830";
     ctx.font = `500 ${r(14)}px 'Courier New', monospace`;
     ctx.letterSpacing = "0px";
     const textH = r(14);
-    const urlText = "prismaticlabs.ai";
-    const urlW = ctx.measureText(urlText).width;
     if (_logoImg && _logoImg.naturalWidth) {
       const logoH2 = textH;
       const logoW = Math.round(logoH2 * _logoImg.naturalWidth / _logoImg.naturalHeight);
-      const startX = W - pad - logoW - r(6) - urlW;
       ctx.save();
       ctx.shadowColor = "rgba(0,0,0,0.6)"; ctx.shadowBlur = r(4);
-      ctx.drawImage(_logoImg, startX, lockupY - logoH2, logoW, logoH2);
+      ctx.drawImage(_logoImg, pad, lockupY - logoH2, logoW, logoH2);
       ctx.restore();
-      ctx.fillText(urlText, startX + logoW + r(6), lockupY);
-    } else {
-      ctx.textAlign = "right";
-      ctx.fillText(urlText, W - pad, lockupY);
-      ctx.textAlign = "left";
     }
+    ctx.textAlign = "right";
+    ctx.fillText("prismaticlabs.ai", W - pad, lockupY);
+    ctx.textAlign = "left";
 
     _store(canvas, `ai-waste-archetype-${d.archetype}.png`);
   }
