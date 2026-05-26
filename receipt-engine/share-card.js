@@ -156,9 +156,11 @@ const ShareCard = (() => {
 
     // ── Bottom: logo left, URL right ─────────────────────────────────
     const lockupY = ty + r(20);
-    ctx.fillStyle = "#f0e830";
-    ctx.font = `500 ${r(14)}px 'Courier New', monospace`;
+    const urlFont = `500 ${r(14)}px 'Courier New', monospace`;
+    ctx.font = urlFont;
     ctx.letterSpacing = "0px";
+    const urlText = "prismaticlabs.ai";
+    const urlW = ctx.measureText(urlText).width;
     const textH = r(14);
     if (_logoImg && _logoImg.naturalWidth) {
       const logoH2 = textH;
@@ -168,9 +170,9 @@ const ShareCard = (() => {
       ctx.drawImage(_logoImg, pad, lockupY - logoH2, logoW, logoH2);
       ctx.restore();
     }
-    ctx.textAlign = "right";
-    ctx.fillText("prismaticlabs.ai", W - pad, lockupY);
-    ctx.textAlign = "left";
+    ctx.fillStyle = "#f0e830";
+    ctx.font = urlFont;
+    ctx.fillText(urlText, W - pad - urlW, lockupY);
 
     _store(canvas, `ai-waste-archetype-${d.archetype}.png`);
   }
