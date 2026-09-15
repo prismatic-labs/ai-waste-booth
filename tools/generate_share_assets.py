@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Generate static share pages and Open Graph cards for AI Waste Receipt.
+# Generate static share pages and Open Graph cards for AI Waste Archetypes.
 
 from __future__ import annotations
 
@@ -107,7 +107,7 @@ def casual_card(archetype: dict) -> Image.Image:
     draw = ImageDraw.Draw(card)
 
     draw.rectangle((0, 0, CARD_W, 12), fill="#f0e830")
-    draw.text((64, 62), "AI WASTE RECEIPT", font=FONTS["mono_bold"], fill="#f0e830")
+    draw.text((64, 62), "AI WASTE ARCHETYPE", font=FONTS["mono_bold"], fill="#f0e830")
     draw.text((64, 122), "I got", font=FONTS["body_small"], fill="#ffffff")
 
     title_font = FONTS["hero"] if len(archetype["name"]) < 24 else FONTS["hero_small"]
@@ -146,8 +146,8 @@ def home_card() -> Image.Image:
     draw = ImageDraw.Draw(card)
     draw.rectangle((0, 0, CARD_W, 12), fill="#f0e830")
     draw.text((64, 82), "PRISMATIC LABS", font=FONTS["mono_bold"], fill="#888888")
-    draw_wrapped(draw, "AI Waste Receipt", (64, 170), FONTS["hero"], "#f0e830", 900, 92, 2)
-    draw_wrapped(draw, "Find your AI waste archetype - or spot silent inference waste in your AI system.", (64, 360), FONTS["body"], "#e8e8e8", 920, 44, 3)
+    draw_wrapped(draw, "AI Waste Archetypes", (64, 170), FONTS["hero"], "#f0e830", 900, 92, 2)
+    draw_wrapped(draw, "A playful quiz for spotting the AI habits that quietly waste time, context, and compute.", (64, 360), FONTS["body"], "#e8e8e8", 920, 44, 3)
     draw.text((64, CARD_H - 64), "prismatic-labs.github.io/ai-waste-booth", font=FONTS["mono_small"], fill="#f0e830")
     return card
 
@@ -160,9 +160,9 @@ def share_page(item: dict, kind: str, page_slug: str, image_version: str) -> str
     if kind == "casual":
         og_title = f"I got {item['name']}"
         desc = item["oneLiner"]
-        eyebrow = "AI WASTE RECEIPT"
+        eyebrow = "AI WASTE ARCHETYPE"
         cta = "Find your archetype"
-        intro = "Find out which AI waste archetype is yours."
+        intro = "Spot the tiny AI habits hiding in repeated generations, oversized context, messy workflows, and forgotten prompts."
         accent = "#f0e830"
     else:
         og_title = f"Silent Failure: {item['name']}"
