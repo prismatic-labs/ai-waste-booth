@@ -188,7 +188,8 @@ function pingCensus(diagnosis) {
     if (!endpoint) return;
     fetch(endpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      // text/plain avoids a CORS preflight, which Apps Script rejects
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({
         id: diagnosis.id,
         useCase: diagnosis.useCase,

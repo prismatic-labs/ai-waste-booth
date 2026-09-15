@@ -6,5 +6,5 @@ const CONFIG = {
   VETCH_SCAN_URL:   "https://github.com/prismatic-labs/vetch/blob/main/QUICKSTART.md", // Free Vetch scan (builder CTA)
   VETCH_REVIEW_URL: "https://prismaticlabs.ai/contact/",          // Vetch review from £295
   CENSUS_SIGNUP_URL:"https://placeholder-census.example.com",   // Email capture fallback form
-  CENSUS_ENDPOINT:  "",  // leave empty - set when census endpoint is live
+  CENSUS_ENDPOINT:  "https://script.google.com/macros/s/AKfycbzszX8r__KLR17FcpNl3ZrrNTQA9D0tTd8lvRw4Ysaa_g5uUmbVtz7NXtbx_4KI04mfWA/exec",  // Google Apps Script census (census/SETUP.md)
 };

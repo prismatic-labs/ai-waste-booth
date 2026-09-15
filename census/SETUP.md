@@ -57,6 +57,34 @@ Complete the quiz on the live site, then check the sheet — a new row should ap
 
 ---
 
+## Updating the script later
+
+After pasting a new version of `apps-script.gs`, a plain Save is not enough — the live
+URL keeps serving the old code until you redeploy:
+
+1. **Deploy → Manage deployments**
+2. Click the pencil icon on the existing deployment
+3. **Version: New version** → **Deploy**
+
+The URL stays the same, so `config.js` doesn't change. If Google asks to re-authorise,
+accept — `@OnlyCurrentDoc` narrows access to this one spreadsheet.
+
+The script only accepts payloads that exactly match what the booth sends. Keep the lists
+at the top of the script in sync with the app, or those results will be silently dropped:
+
+- `ARCHETYPES` ↔ `content/archetypes.json`
+- `PATTERNS` ↔ `content/patterns.json`
+- `BUILDER_USE_CASES` ↔ `APP_TYPES` labels in `receipt-engine/app.js`
+- `USE_CASE_MAX_CHARS` ↔ the `maxlength` on the quiz's "Other…" input
+
+Rejected submissions never show an error to the visitor. To see why something was
+dropped, open **Executions** in the Apps Script sidebar and look for `census rejected:`.
+
+Rows go to a tab named **Responses** (created automatically). Rows written by an older
+version of the script may be on the first tab instead.
+
+---
+
 ## Checking the tally during the event
 
 In the Apps Script editor, click the function dropdown (top toolbar, next to the run ▶ button), select `logTally`, then click ▶.  

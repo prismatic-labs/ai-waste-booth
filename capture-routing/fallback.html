@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prismatic Labs — AI Waste Receipt</title>
+  <title>Prismatic Labs — AI Waste Archetypes</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -108,10 +108,10 @@
 <body>
 
   <p class="mark">◈ PRISMATIC LABS</p>
-  <h1>AI WASTE<br>RECEIPT</h1>
+  <h1>AI WASTE<br>ARCHETYPES</h1>
   <p class="sub">
     The main booth experience is temporarily unavailable.<br>
-    Leave your details and we'll follow up.
+    Leave your details and we'll help you find your archetype.
   </p>
 
   <div class="form-wrap">
@@ -130,16 +130,16 @@
         <option value="curious">Just curious</option>
       </select>
 
-      <button type="submit">Send me my diagnosis →</button>
+      <button type="submit">Send me my archetype →</button>
     </form>
 
     <div class="success" id="success-msg">
       <h2>Got it.</h2>
-      <p>We'll send your AI Waste Receipt to that address within 24 hours.<br>Thanks for stopping by.</p>
+      <p>We'll send your AI Waste Archetype to that address within 24 hours.<br>Thanks for stopping by.</p>
     </div>
   </div>
 
-  <p class="footer">prismaticlabs.ai &nbsp;·&nbsp; Tech For All · Ox Tech Week 2026</p>
+  <p class="footer">prismaticlabs.ai &nbsp;·&nbsp; Startup Summit Lisbon 2026</p>
 
   <script>
     // Simple in-page submission — replace action with a Tally/Formspree endpoint if needed
@@ -162,7 +162,7 @@
         const body = encodeURIComponent(
           `Name: ${data.name}\nEmail: ${data.email}\nType: ${data.kind || "not specified"}`
         );
-        window.location.href = `mailto:marco.z.difraia@gmail.com?subject=AI+Waste+Receipt+Booth+Lead&body=${body}`;
+        window.location.href = `mailto:marco.z.difraia@gmail.com?subject=AI+Waste+Archetypes+Booth+Lead&body=${body}`;
       }
 
       this.style.display = "none";
